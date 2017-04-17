@@ -1,0 +1,82 @@
+<template>
+  <div>
+    <m-header title="账号注册"></m-header>
+    <div class="view-wrap">
+      <div class="register-form">
+        <group>
+          <x-input type="text" v-model="id" placeholder="请输入6位纯数字MI号" :max="6"></x-input>
+          <x-input type="text" v-model="nickname" placeholder="请输入8位以下昵称" :max="8"></x-input>
+          <x-input type="password" v-model="password" placeholder="请输入16位以下密码" :max="16"></x-input>
+          <x-input type="password" v-model="password1" placeholder="请确认密码"></x-input>
+        </group>
+      </div>
+
+      <div class="register-form-btn" style="margin-top: 20px;padding: 0 10px;">
+        <x-button type="warn" @click.native="doRegister">注 册</x-button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import {XInput, Group, XButton} from 'vux'
+  import MHeader from '../components/header'
+
+  export default {
+    data(){
+      return {
+        id: '123456',
+        nickname: '123456',
+        password: '123456',
+        password1: '123456'
+      }
+    },
+    components: {
+      XInput,
+      Group,
+      XButton,
+      MHeader
+    },
+    methods: {
+      doRegister(){
+        const {id, nickname, password, password1, $toast} = this;
+
+        if (id !== '' && nickname !== '' && password !== '' && password1 !== '') {
+          if (!/^\d{6}$/.test(id)) {
+            $toast('MI账号为6位纯数字');
+            return;
+          }
+
+          if (nickname.length > 8) {
+            $toast('昵称需小于8位');
+            return;
+          }
+
+          if (password.length > 16) {
+            $toast('密码需小于16位');
+            return;
+          }
+
+          if (password !== password1) {
+            $toast('密码不一致');
+            return;
+          }
+
+          this.$http.post('/api/user', {
+            id, nickname, password, password1
+          }).then(({data}) => {
+            $toast(data.message);
+
+            if (data.code === '0') {
+              setTimeout(() => {
+                this.$router.push({path: '/home'});
+              },2000)
+            }
+          })
+        } else {
+          $toast('请检查是否输入完整');
+        }
+      }
+    }
+  }
+</script>

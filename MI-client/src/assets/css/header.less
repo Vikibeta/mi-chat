@@ -1,0 +1,11 @@
+@import "global";
+
+.header{
+  background-color: @theme-color;width: 100%;height: @header-height;line-height: @header-height;color: #fff;font-size: 16px;position: fixed;top: 0;left: 0;z-index: 100;
+  &-back{position: absolute;width: 30px;height: 100%;left: 10px;top: 0;
+    .iconfont{font-size: 20px;}
+  }
+  &-icon{position: absolute;width: @header-height;height: @header-height;right: 10px;top: 0;font-size: 24px;}
+}
+
+.view-wrap{margin-top: @header-height;padding-top: 30px;overflow: hidden}
