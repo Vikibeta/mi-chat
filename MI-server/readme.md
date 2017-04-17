@@ -1,6 +1,6 @@
-## 数据库Model
+### 数据库Model
 
-### User (用户)
+#### User (用户)
 
 ```js
 {
@@ -16,7 +16,7 @@
 }
 ```
 
-### Contacts (联系人)
+#### Contacts (联系人)
 
 ```js
 {
@@ -26,49 +26,51 @@
 }
 ```
 
-### Messages (消息)
+#### Messages (消息)
 
 ```js
 {
-	MI: String,   // 所属MI账号
-    messages: [{
-    	_id: String,   // 发送者账号
-        messages:[{
-        	time: Date,   // 发送日期
-            content: String   // 消息内容
-        }],
-        not_read: Number   // 未读数
-    }]
+    _id: {type: String, required: true, unique: true},   // 所属MI账号 格式类似 '555555-666666'
+    messages: [],
+    min_not_read: {type: Number, default: 0},  // 账号数值较小的一方的未读数，这里是 555555,
+    max_not_read: {type: Number, default: 0}   // 账号数值较大的一方的未读数，这里是 666666,
 }
 ```
 
-## API
+### API
 
-### User (用户)
+#### User (用户)
 
-##### `POST` /user
+| 请求地址      |    请求方式 | params  | body | 描述  |
+| :--------: | :--------: | :--: | :--: | :--|
+|  /user | `POST` | - | `MI` 账号 `nickname` 昵称 `password` 密码 `password1` 确认密码 | 用户注册|
 
-```js
-body: {
-	MI,  //账号
-    nickname,  //昵称
-    password,  //密码
-    password1  //确认密码
-}
-```
+<br>
+#### Authenticate (认证)
 
-### Authenticate (认证)
+| 请求地址      |    请求方式 | params  | body | 描述 |
+| :--------: | :--------: | :--: | :--: | :--|
+|  /authenticate | `POST` | - | `MI` 账号  `password` 密码 | 用户登录，登陆后，服务端生成`token`，返回给客户端，客户端在以后的请求中都带上`token`|
 
-##### `POST` /authenticate
+<br>
+#### jwtMiddleware (jsonWebToken中间件，用于用户会话，处于认证和注册路由之后，其他路由之前)
 
-```js
-body: {
-	MI,  //账号
-    password   //密码
-}
-```
+<br>
+#### Contacts (联系人)
 
-### jwtMiddleware (jsonWebToken中间件，用于用户会话，处于认证和注册路由之后，其他路由之前)
+| 请求地址      |    请求方式 | params  | body | 描述 |
+| :--------: | :--------: | :--: | :--: | :--|
+| /contacts  | `GET` |  -  | - | 获取联系人列表，解析`token`得到`_id`，返回联系人列表 |
+|  /contacts   |   `POST` |  - | `contacter` 被添加的联系人 `group_name` 添加到哪个分组 |添加联系人。解析`token`得到通过 `user` 和 `group_name` 查分组信息，并将 `contacter` 添加到该分组的联系人数组中|
 
-###
+<br>
+#### Private Chat (私聊)
+
+| 请求地址      |    请求方式 | params  | body | 描述 |
+| :--------: | :--------: | :--: | :-- | :--------- |
+| /private-chat | `POST` | - | `to`发给谁 | `token`验证，如果该 `socket room` 已存在则加入，否则创建一个 `room` ，`socket` 断开时如果对方不在线则释放这个 `room`,聊天的内容存入消息数据库
+
+
+
+
 
