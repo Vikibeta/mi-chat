@@ -45,8 +45,58 @@
             msgTopic: '呵呵',
             time: '2017-10-12',
             msgCount: 12
+          }, {
+            _id: '123456',
+            nickname: '往事随风',
+            msgTopic: '呵呵',
+            time: '2017-10-12',
+            msgCount: 12
+          }, {
+            _id: '123456',
+            nickname: '往事随风',
+            msgTopic: '呵呵',
+            time: '2017-10-12',
+            msgCount: 12
+          }, {
+            _id: '123456',
+            nickname: '往事随风',
+            msgTopic: '呵呵',
+            time: '2017-10-12',
+            msgCount: 12
+          }, {
+            _id: '123456',
+            nickname: '往事随风',
+            msgTopic: '呵呵',
+            time: '2017-10-12',
+            msgCount: 12
+          }, {
+            _id: '123456',
+            nickname: '往事随风',
+            msgTopic: '呵呵',
+            time: '2017-10-12',
+            msgCount: 12
+          }, {
+            _id: '123456',
+            nickname: '往事随风',
+            msgTopic: '呵呵',
+            time: '2017-10-12',
+            msgCount: 12
+          }, {
+            _id: '123456',
+            nickname: '往事随风',
+            msgTopic: '呵呵',
+            time: '2017-10-12',
+            msgCount: 12
           }]
       }
+    },
+    beforeRouteEnter(to, from, next){
+      document.body.className = 'body-auto';
+      next()
+    },
+    beforeRouteLeave(to, from, next){
+      document.body.className = '';
+      next();
     },
     components: {
       CellBox,
