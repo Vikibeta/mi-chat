@@ -74,11 +74,10 @@
           _this.$toast(data.message);
 
           if (data.code === '0') {
-            console.log(1);
             const token = data.data.token;
             this.$http.defaults.params.token = token;  // 存token
-            console.log(id);
             this.$store.commit('setID', id);  // ID存入全局状态
+            this.$store.dispatch('SOCKET_CON', token);
             if (window.localStorage) {
               window.localStorage.setItem('MI-user', this.id);
               window.localStorage.setItem('MI-password', this.password);
@@ -87,10 +86,6 @@
             }
             this.$router.push({path: '/home'});  // 转到home页面
           }
-
-          this.$http.get('/api/contacts').then(({data}) => {
-            console.log(data);
-          })
         })
       },
       doLogin(){

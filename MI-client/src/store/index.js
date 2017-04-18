@@ -8,6 +8,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex);
 
+import socketModule from './socketModule'
+
 const store = new Vuex.Store({
   state: {
     id: '',
@@ -23,6 +25,9 @@ const store = new Vuex.Store({
     ['SET_CONTACTS'](state, contacts){
       state.contacts = contacts;
     }
+  },
+  modules: {
+    socketModule: socketModule
   }
 });
 

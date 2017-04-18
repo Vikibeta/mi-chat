@@ -25,7 +25,6 @@ module.exports = function () {
                 } else {
                     req.decoded = decoded;
                     req.miUser = decoded._doc._id;
-                    console.log(req.miUser + '验证通过');
                     next();
                 }
             })
