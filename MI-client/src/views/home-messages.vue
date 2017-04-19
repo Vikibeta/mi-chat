@@ -18,8 +18,7 @@
           </div>
         </div>
         <div class="message-list-avatar">
-          <img
-            src="https://img.alicdn.com/imgextra/i3/1386405035427072941/TB2pEm.kypnpuFjSZFkXXc4ZpXa_!!0-saturn_solar.jpg_240x240xz.jpg_.webp">
+          <img :src="item.avatar | avatarLocation">
         </div>
       </div>
     </cell-box>
@@ -28,6 +27,7 @@
 
 <script>
   import {CellBox, Group} from 'vux'
+  import {avatarLocation} from '../filters'
 
   export default {
     data(){
@@ -37,57 +37,16 @@
           nickname: '往事随风',
           msgTopic: '呵呵',
           time: '2017-10-12',
-          msgCount: 12
-        },
-          {
-            _id: '123456',
-            nickname: '往事随风',
-            msgTopic: '呵呵',
-            time: '2017-10-12',
-            msgCount: 12
-          }, {
-            _id: '123456',
-            nickname: '往事随风',
-            msgTopic: '呵呵',
-            time: '2017-10-12',
-            msgCount: 12
-          }, {
-            _id: '123456',
-            nickname: '往事随风',
-            msgTopic: '呵呵',
-            time: '2017-10-12',
-            msgCount: 12
-          }, {
-            _id: '123456',
-            nickname: '往事随风',
-            msgTopic: '呵呵',
-            time: '2017-10-12',
-            msgCount: 12
-          }, {
-            _id: '123456',
-            nickname: '往事随风',
-            msgTopic: '呵呵',
-            time: '2017-10-12',
-            msgCount: 12
-          }, {
-            _id: '123456',
-            nickname: '往事随风',
-            msgTopic: '呵呵',
-            time: '2017-10-12',
-            msgCount: 12
-          }, {
-            _id: '123456',
-            nickname: '往事随风',
-            msgTopic: '呵呵',
-            time: '2017-10-12',
-            msgCount: 12
-          }, {
-            _id: '123456',
-            nickname: '往事随风',
-            msgTopic: '呵呵',
-            time: '2017-10-12',
-            msgCount: 12
-          }]
+          msgCount: 12,
+          avatar: 'default1.jpg'
+        },{
+          _id: '123456',
+          nickname: '往事随风',
+          msgTopic: '呵呵',
+          time: '2017-10-12',
+          msgCount: 12,
+          avatar: 'default2.jpg'
+        }]
       }
     },
     beforeRouteEnter(to, from, next){
@@ -97,6 +56,9 @@
     beforeRouteLeave(to, from, next){
       document.body.className = '';
       next();
+    },
+    filters:{
+      avatarLocation
     },
     components: {
       CellBox,

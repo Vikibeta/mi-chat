@@ -13,7 +13,7 @@ module.exports = function (router) {
      * @req.params.user : 登录的用户
      */
     router.get('/contacts', function (req, res) {
-        const user = req.miUser;
+        const user = req.mi_user;
 
         const contactsModel = Schema.Contacts;
 

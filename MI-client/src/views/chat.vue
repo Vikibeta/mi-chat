@@ -17,7 +17,7 @@
              :class="{left: item.from === toID, right: item.from !== toID}">
           <div class="chat-box-top">
             <div class="chat-box-avatar">
-              <img src="http://placehold.it/50x50">
+              <img :src="item.avatar | avatarLocation">
             </div>
             <div class="chat-box-content" v-html="item.msg"></div>
             <div class="clearfix"></div>
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-  import {messageTime} from '../filters'
+  import {messageTime, avatarLocation} from '../filters'
   import {XButton} from 'vux'
 
   export default {
@@ -72,7 +72,8 @@
       XButton
     },
     filters: {
-      messageTime: messageTime
+      messageTime,
+      avatarLocation
     },
     mounted(){
 

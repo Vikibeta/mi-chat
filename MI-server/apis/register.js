@@ -8,12 +8,12 @@ var Schema = require('../mongo_models');
 var error = require('../utils/errorHandler');
 
 module.exports = function (router) {
+    const UserModel = Schema.User;
+
     router.post('/user', function (req, res) {
         const user = req.body;
 
         const {id:_id, nickname, password, password1} = user;
-
-        const userModel = Schema.User;
 
         const findUser = async function () {
 
@@ -58,13 +58,18 @@ module.exports = function (router) {
 
             const md5Password = utils.md5(password);
 
-            const newUser = await userModel.create({
+            // 添加到用户表中
+            await UserModel.create({
                 _id,
                 nickname,
                 password: md5Password
             }).catch(err => {
                 error(err, res);
             });
+
+            // 默认的三个分组
+            awiat
+
 
             return res.json({
                 code: '0',
@@ -73,11 +78,6 @@ module.exports = function (router) {
         };
 
         findUser();
-
-    });
-
-
-    router.put('/user', function (req, res) {
 
     });
 };

@@ -2,8 +2,7 @@
   <div>
     <div class="home-header">
       <div class="home-header-avatar">
-        <img
-          src="https://img.alicdn.com/imgextra/i3/1386405035427072941/TB2pEm.kypnpuFjSZFkXXc4ZpXa_!!0-saturn_solar.jpg_240x240xz.jpg_.webp">
+        <img :src="user.avatar | avatarLocation">
       </div>
       <div class="button-bar">
         <span class="button-bar-item" @click="buttonBarActive=0" :class="{active:buttonBarActive === 0}">消息</span>
@@ -25,11 +24,18 @@
 
 <script>
   import {mapGetters} from 'vuex'
+  import {avatarLocation} from '../filters'
   export default {
     data(){
       return {
         buttonBarActive: 0
       }
+    },
+    computed: {
+      ...mapGetters(['user'])
+    },
+    filters: {
+      avatarLocation
     },
     mounted(){
       this.getContacts();

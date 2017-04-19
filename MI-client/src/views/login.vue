@@ -31,17 +31,21 @@
   export default {
     data(){
       return {
-        id: window.localStorage ? (window.localStorage.getItem('MI-user') || '') : '',
-        password: window.localStorage ? (window.localStorage.getItem('MI-password') || '') : ''
+        id: '',
+        password: ''
       }
     },
     components: {XInput, Group, XButton},
     created(){
-      const {id, password} = this;
-      if (id === '' || password === '') {
-        return;
+      if (window.localStorage.getItem('mi_token')) {
+        this.$http.get('/api/user').then(({data}) => {
+          var { code, data } = data;
+          if(code === '0') {
+            this.$store.commit('SET_USER', data);
+            this.$router.push({path: '/home'});
+          }
+        })
       }
-      this.doAuthenticate();
     },
     methods: {
       doValidate(){
@@ -70,19 +74,16 @@
         this.$http.post('/api/authentication', {
           id, password
         }).then(({data}) => {
+          var {code, message, data} = data;
+          _this.$toast(message);
 
-          _this.$toast(data.message);
-
-          if (data.code === '0') {
-            const token = data.data.token;
+          if (code === '0') {
+            const token = data.token;
             this.$http.defaults.params.token = token;  // 存token
-            this.$store.commit('setID', id);  // ID存入全局状态
+            this.$store.commit('SET_USER', data.user);  // 个人信息存入全局状态
             this.$store.dispatch('SOCKET_CON', token);
             if (window.localStorage) {
-              window.localStorage.setItem('MI-user', this.id);
-              window.localStorage.setItem('MI-password', this.password);
-              window.localStorage.setItem('MI-token', token);
-
+              window.localStorage.setItem('mi_token', token);
             }
             this.$router.push({path: '/home'});  // 转到home页面
           }

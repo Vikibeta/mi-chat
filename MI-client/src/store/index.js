@@ -6,24 +6,38 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 Vue.use(Vuex);
 
 import socketModule from './socketModule'
 
 const store = new Vuex.Store({
   state: {
-    id: '',
+    user: {
+      avatar: 'default.jpg'
+    },
     contacts: []
   },
   getters: {
-    contacts: state => state.contacts
+    contacts: state => state.contacts,
+    user: state => state.user
   },
   mutations: {
-    setID(state, id){
-      state.id = id;
+    ['SET_USER'](state, user){
+      state.user = user;
     },
     ['SET_CONTACTS'](state, contacts){
       state.contacts = contacts;
+    }
+  },
+  actions: {
+    ['GET_USER']({commit}, token) {
+      axios.get('/api/user').then(({data}) => {
+        var {code, data} = data;
+        if(code === '0') {
+          commit('SET_USER', data);
+        }
+      })
     }
   },
   modules: {

@@ -21,7 +21,7 @@ module.exports = function (router) {
         const doAuth = async function () {
             const user = await userModel.findOne({
                 _id, password: md5Password
-            }).catch(err => {
+            },"-messages -password -is_online").catch(err => {
                 error(err, res);
             });
 
@@ -40,9 +40,7 @@ module.exports = function (router) {
                 code: '0',
                 message: '登录成功',
                 data: {
-                    _id: user._id,
-                    nickname: user.nickname,
-                    token: token
+                    user,token
                 }
             })
         };

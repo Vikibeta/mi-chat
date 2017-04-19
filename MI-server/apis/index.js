@@ -4,14 +4,14 @@ var router = express.Router();
 
 var config = require('../config');
 
-var user = require('./user');
-var authenticate = require('./authentication');
+var register = require('./register');
+var login = require('./login');
+var getUser = require('./getUser');
 var contacts = require('./contacts');
-var privateChat = require('./private-chat');
 
 module.exports = function () {
-    user(router);
-    authenticate(router);
+    register(router);
+    login(router);
 
     router.use(function (req, res, next) {
         const token = req.body.token || req.query.token;
@@ -20,11 +20,11 @@ module.exports = function () {
                 if (err) {
                     return res.json({
                         code: '1',
-                        message: '身份验证已过期'
+                        message: err
                     })
                 } else {
                     req.decoded = decoded;
-                    req.miUser = decoded._doc._id;
+                    req.mi_user = decoded._doc._id;
                     next();
                 }
             })
@@ -35,9 +35,9 @@ module.exports = function () {
         }
     });
 
-    contacts(router);
+    getUser(router);
 
-    privateChat(router);
+    contacts(router);
 
     return router;
 };

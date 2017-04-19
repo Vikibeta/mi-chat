@@ -53,21 +53,20 @@ module.exports = function (io) {
                 if (err) {
                     next(new Error(err));
                 } else {
-
                     // 缓存发送者连接者id
                     socket.from_id = decoded._doc._id;
 
                     // 数据库改变在线状态
-                    UserModel.update({_id: decoded._doc._id},{
+                    UserModel.update({_id: decoded._doc._id}, {
                         $set: {
                             is_online: true
                         }
-                    },function (err) {
-                        console.log(err);
+                    }).then(doc => {
+                        console.log(decoded._doc._id + '已登录');
+                        return next();
+                    }).catch(err => {
+                        error(err);
                     });
-
-                    console.log(decoded._doc._id + '已登录');
-                    return next();
                 }
             })
         } else {
@@ -194,15 +193,15 @@ module.exports = function (io) {
             leavePrivateRoom(socket);
 
             // 数据库改变在线状态为离线
-            UserModel.update({_id: decoded._doc._id},{
+            UserModel.update({_id: socket.from_id}, {
                 $set: {
                     is_online: false
                 }
-            },function (err) {
+            }, function (err) {
                 console.log(err);
             });
 
-            console.log(socket.from_id+ '已离线');
+            console.log(socket.from_id + '已离线');
         })
     });
 };

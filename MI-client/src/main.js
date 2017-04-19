@@ -21,7 +21,7 @@ Vue.config.productionTip = false;
 Vue.use(ToastPlugin);
 
 Axios.defaults.params = {
-  token: window.localStorage ? window.localStorage.getItem('MI-token') : ''
+  token: window.localStorage ? window.localStorage.getItem('mi_token') : ''
 };
 
 Vue.prototype.$http = Axios;
@@ -31,8 +31,11 @@ FastClick.attach(document.body);
 
 router.beforeEach((to, from, next) => {
   // socket断线重连  登录，注册，忘记密码页面除外
+  // 刷新页面重新获取个人信息
   if(to.path !== ('/login' || '/register' || '/forget') && store.state.socketModule.socket === null) {
-    store.dispatch('SOCKET_CON', localStorage.getItem('MI-token'));
+    let token = localStorage.getItem('mi_token');
+    store.dispatch('GET_USER');
+    store.dispatch('SOCKET_CON', token);
   }
   next();
 });

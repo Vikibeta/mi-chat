@@ -65,5 +65,11 @@ const messageTime = function (timestamp) {
   return `${timeYear}-${timeMonth}-${timeDate}`;
 };
 
-export {messageTime}
+const avatarLocation = function (avatarName) {
+  const avatarDomain = 'http://oonegmkmg.bkt.clouddn.com';
+  const avatarQiniuSheet = 'imageView2/1/w/128/h/128/interlace/1/q/80|imageslim';
+  return `${avatarDomain}/${avatarName}?${avatarQiniuSheet}`;
+};
+
+export {messageTime, avatarLocation}
 
