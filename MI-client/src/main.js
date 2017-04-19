@@ -12,7 +12,7 @@ import ramPolyfill from './utils/requestAnimationFramePolyfill';
 import { ToastPlugin } from 'vux'
 
 import './assets/css/neat-min.css'
-import './assets/css/style.css'
+import './assets/css/style.less'
 
 ramPolyfill();  // requestAnimationFrame的Polyfill
 

@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="header chat-header " style="padding: 4px 0">
-      <span class="header-back text-left" onclick="$router.push({path:'/home'})"><i
-        class="iconfont icon-back"></i></span>
+      <span class="header-back text-left" @click="$router.push({path:'/home'})">
+        <i class="iconfont icon-back"></i>
+      </span>
       <div class="chat-header-content text-center">
         <p class="chat-header-nickname">往事随风</p>
         <p class="chat-header-online">在线</p>
@@ -96,10 +97,7 @@
 //      const token = this.$http.defaults.params.token;
 //      this.socket = this.$io(`http://localhost:3000/private-chat-namespace?to=${toID}&token=${token}&from=${fromID}`);
 
-      socket.emit('joinPrivateRoom', {
-        from: fromID,
-        to: toID
-      });
+      socket.emit('joinPrivateChat', toID);
 
       // token验证没通过时的前端处理
       socket.on('err', function () {
@@ -190,6 +188,10 @@
         this.$refs.input.innerHTML = '';
         this.socket.emit('message', message);
       },
+    },
+    beforeRouteLeave(to, from, next){
+        this.socket.emit('leavePrivateChat');
+        next();
     }
   }
 </script>
