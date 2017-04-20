@@ -44,14 +44,14 @@ module.exports = function (router) {
      * @req.body.group : 放置的分组
      */
     router.post('/contacts', function (req, res) {
-        const user = req.miUser;
+        const user = req.mi_user;
 
-        const {contacter, group} = req.body;
+        const {contacter, group_name} = req.body;
 
         const contactsModel = Schema.Contacts;
 
         const addUserToGroup = async function () {
-            const user = await contactsModel.update({MI: user, group_name: group}, {
+            const user = await contactsModel.update({MI: user, group_name: group_name}, {
                 '$addToSet': {'contacts': contacter}
             }).catch(err => {
                 error(err, res);

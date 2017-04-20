@@ -1,6 +1,6 @@
 <template>
   <div>
-    <m-header title="添加联系人"></m-header>
+    <m-header title="添加联系人" @on-back="$router.push({path: '/home'})"></m-header>
     <div class="view-wrap" style="padding-top: 0">
       <tab custom-bar-width="100px">
         <tab-item selected @on-item-click="$router.push({path:'/add/exactly'})">精确查找</tab-item>

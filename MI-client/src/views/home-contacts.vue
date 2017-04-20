@@ -12,7 +12,7 @@
       <cell-box v-for="(contact, index2) in item.contacts" v-show="foldStatus[index]">
         <div class="contact-item-user">
           <div class="contact-item-user-avatar">
-            <img :src="contact.avatar">
+            <img :src="contact.avatar | avatarLocation">
           </div>
           <div class="contact-item-user-content text-ellipsis">
             {{contact.nickname}}
@@ -20,7 +20,7 @@
           </div>
           <div class="contact-item-user-status">
             <span class="contact-item-user-statusTip"
-                  :class="{online: contact.online}">{{contact.online ? '在线' : '离线'}}
+                  :class="{online: contact.is_online}">{{contact.is_online ? '在线' : '离线'}}
             </span>
           </div>
         </div>
@@ -32,6 +32,8 @@
 <script>
   import {Group, CellBox} from 'vux'
   import {mapGetters} from 'vuex'
+  import {avatarLocation} from '../filters'
+
   export default {
     components: {
       Group,
@@ -70,6 +72,9 @@
         }],
         foldStatus: []
       }
+    },
+    filters:{
+      avatarLocation
     },
     computed: {
       ...mapGetters(['contacts'])

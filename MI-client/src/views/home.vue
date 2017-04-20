@@ -8,13 +8,13 @@
         <span class="button-bar-item" @click="buttonBarActive=0" :class="{active:buttonBarActive === 0}">消息</span>
         <span class="button-bar-item" @click="buttonBarActive=1" :class="{active:buttonBarActive === 1}">联系人</span>
       </div>
-      <div class="home-header-plus iconfont icon-add"></div>
+      <div class="home-header-plus iconfont icon-add" @click="$router.push({path: '/add'})"></div>
     </div>
 
     <div class="home-list" style="margin-top: 44px;">
       <div class="home-search">
         <div class="home-search-wrap text-center">
-          <span class="iconfont icon-search"> 搜索</span>
+          <span class="iconfont icon-search">搜索</span>
         </div>
       </div>
       <router-view></router-view>

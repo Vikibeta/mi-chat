@@ -65,12 +65,29 @@
           this.$http.post('/api/user', {
             id, nickname, password, password1
           }).then(({data}) => {
+
             $toast(data.message);
 
             if (data.code === '0') {
-              setTimeout(() => {
-                this.$router.push({path: '/home'});
-              },2000)
+              return this.$http.post('/api/authentication', {
+                id: this.id,
+                password: this.password
+              })
+            }
+          }).then(({data}) => {
+            var {code, data} = data;
+            if(code === '0') {
+              const token = data.token;
+              this.$http.defaults.params.token = token;  // 存token
+              this.$store.commit('SET_USER', data.user);  // 个人信息存入全局状态
+              this.$store.dispatch('SOCKET_CON', token);
+              if (window.localStorage) {
+                window.localStorage.setItem('mi_token', token);
+              }
+
+              setTimeout(()=>{
+                this.$router.push({path: '/home'})
+              },1500);
             }
           })
         } else {

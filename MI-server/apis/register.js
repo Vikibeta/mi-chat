@@ -9,6 +9,7 @@ var error = require('../utils/errorHandler');
 
 module.exports = function (router) {
     const UserModel = Schema.User;
+    const ContactsModel = Schema.Contacts;
 
     router.post('/user', function (req, res) {
         const user = req.body;
@@ -17,7 +18,7 @@ module.exports = function (router) {
 
         const findUser = async function () {
 
-            const user = await userModel.findOne({_id}, '_id').catch(err => {
+            const user = await UserModel.findOne({_id}, '_id').catch(err => {
                 error(err, res);
             });
 
@@ -67,13 +68,19 @@ module.exports = function (router) {
                 error(err, res);
             });
 
-            // 默认的三个分组
-            awiat
+            // 默认的分组
+            await ContactsModel.create({
+                MI: _id,
+                group_name: '我的好友',
+                contacts: []
+            }).catch(err => {
+                error(err, res);
+            });
 
 
             return res.json({
                 code: '0',
-                message: '注册成功'
+                message: '注册成功，正在为您登录'
             });
         };
 
