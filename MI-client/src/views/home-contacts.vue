@@ -1,5 +1,5 @@
 <template>
-  <div class="home-contacts">
+  <div>
     <group v-for="(item, index) in contacts" class="contact-item">
       <cell-box @click.native="toggleFold(index)">
         <div class="contact-item-fold">

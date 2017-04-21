@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home">
     <div class="home-header">
       <div class="home-header-avatar">
         <img :src="user.avatar | avatarLocation">

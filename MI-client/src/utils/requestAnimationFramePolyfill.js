@@ -3,7 +3,7 @@
  * https://www.github.com/lavyun
  * lavyun@163.com
  */
-
+// requestAnimationFrame的polyfill
 export default function() {
   var lastTime = 0;
   var vendors = ['ms', 'moz', 'webkit', 'o'];
