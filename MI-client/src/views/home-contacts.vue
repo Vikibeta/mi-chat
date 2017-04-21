@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home-contacts">
     <group v-for="(item, index) in contacts" class="contact-item">
       <cell-box @click.native="toggleFold(index)">
         <div class="contact-item-fold">
@@ -13,7 +13,7 @@
         </div>
       </cell-box>
       <cell-box v-for="(contact, index2) in item.contacts" v-show="foldStatus[index]"
-        @click.native="$router.push({path: `/chat/${contact._id}`})">
+                :link="{path: `/chat/${contact._id}`}">
         <div class="contact-item-user">
           <div class="contact-item-user-avatar">
             <img :src="contact.avatar | avatarLocation">

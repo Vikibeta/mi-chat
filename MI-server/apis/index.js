@@ -6,8 +6,9 @@ var config = require('../config');
 
 var register = require('./register');
 var login = require('./login');
-var getUser = require('./getUser');
+var user = require('./user');
 var contacts = require('./contacts');
+var messages = require('./messages');
 
 module.exports = function () {
     register(router);
@@ -35,10 +36,9 @@ module.exports = function () {
         }
     });
 
-    getUser(router);
-
+    user(router);
+    messages(router);
     contacts(router);
-
     return router;
 };
 

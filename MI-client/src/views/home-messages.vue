@@ -5,20 +5,29 @@
         <div class="message-list-content">
           <div class="message-list-content-top">
             <div class="message-list-text">
-              <strong class="message-list-nickname message-list-text float-left">{{item.nickname}}</strong>
-              <span class="message-list-time-date message-list-text float-right text-color">{{item.time}}</span>
+              <strong
+                class="message-list-nickname message-list-text float-left">
+                {{item.messages_info.nickname}}
+              </strong>
+              <span class="message-list-time-date message-list-text float-right text-color">
+                {{item.latest_message.time | messageTime}}
+              </span>
               <div class="clearfix"></div>
             </div>
           </div>
           <div class="message-list-content-bottom">
             <div class="message-list-text has-tip">
-              <p class="message-list-value text-ellipsis">{{item.msgTopic}}</p>
-              <span class="message-list-tip">{{item.msgCount}}</span>
+              <p class="message-list-value text-ellipsis">
+                {{item.latest_message.msg}}
+              </p>
+              <span class="message-list-tip" v-show="item.messages_info.not_read">
+                {{item.messages_info.not_read}}
+              </span>
             </div>
           </div>
         </div>
         <div class="message-list-avatar">
-          <img :src="item.avatar | avatarLocation">
+          <img :src="item.messages_info.avatar | avatarLocation">
         </div>
       </div>
     </cell-box>
@@ -27,27 +36,12 @@
 
 <script>
   import {CellBox, Group} from 'vux'
-  import {avatarLocation} from '../filters'
+  import {avatarLocation, messageTime} from '../filters'
+  import {mapGetters} from 'vuex'
 
   export default {
-    data(){
-      return {
-        messages: [{
-          _id: '123456',
-          nickname: '往事随风',
-          msgTopic: '呵呵',
-          time: '2017-10-12',
-          msgCount: 12,
-          avatar: 'default1.jpg'
-        },{
-          _id: '123456',
-          nickname: '往事随风',
-          msgTopic: '呵呵',
-          time: '2017-10-12',
-          msgCount: 12,
-          avatar: 'default2.jpg'
-        }]
-      }
+    computed: {
+      ...mapGetters(['messages'])
     },
     beforeRouteEnter(to, from, next){
       document.body.className = 'body-auto';
@@ -57,8 +51,9 @@
       document.body.className = '';
       next();
     },
-    filters:{
-      avatarLocation
+    filters: {
+      avatarLocation,
+      messageTime
     },
     components: {
       CellBox,

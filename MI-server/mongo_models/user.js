@@ -19,6 +19,6 @@ module.exports = {
         avatar: {type: String, default: `default${Math.ceil(Math.random() * 9)}.jpg`},  // 头像地址 有九张默认头像
         signature: String,   // 个性签名
         photo_wall: String,   // 照片墙地址
-        messages: []   // 首页显示的消息列表
+        messages: [{type: String, ref: 'Messages'}]   // 首页显示的消息列表
     }
 }

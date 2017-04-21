@@ -32,7 +32,7 @@
       }
     },
     computed: {
-      ...mapGetters(['user'])
+      ...mapGetters(['user', 'has_get'])
     },
     filters: {
       avatarLocation
@@ -71,13 +71,25 @@
         }
       },
       getContacts(){
-        this.$http.get('/api/contacts').then(({data}) => {
-          var {code, data} = data;
-          if (code === '0') {
-            this.calculateOnlineCount(data);
-            this.$store.commit('SET_CONTACTS', data);
-          }
-        })
+        // 如果之前没有获取过联系人，则获取，做一下缓存
+        if (!this.has_get.contacts) {
+          this.$http.get('/api/contacts').then(({data}) => {
+            var {code, data} = data;
+            if (code === '0') {
+              this.calculateOnlineCount(data);
+              this.$store.commit('SET_CONTACTS', data);
+            }
+          });
+        }
+
+        if (!this.has_get.messages) {
+          this.$http.get('/api/messages').then(({data}) => {
+            var { code, data } = data;
+            if(code === '0') {
+                this.$store.commit('SET_MESSAGES', data);
+            }
+          })
+        }
       }
     }
   }
