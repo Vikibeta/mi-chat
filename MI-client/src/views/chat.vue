@@ -56,6 +56,7 @@
 
 <script>
   import {messageTime, avatarLocation} from '../filters'
+  import {mapGetters} from 'vuex'
   import {XButton} from 'vux'
 
   export default {
@@ -64,7 +65,6 @@
         socket: null,
         messages: [],
         message: '',
-        fromID: '',
         toID: ''
       }
     },
@@ -75,6 +75,9 @@
       messageTime,
       avatarLocation
     },
+    computed: {
+      ...mapGetters(['me_id'])
+    },
     mounted(){
 
       this.textAreaPaste();
@@ -83,13 +86,6 @@
 
       const toID = this.$route.params.to;
       this.toID = toID;
-
-
-      // todo 需要删除
-      const fromID = this.$route.params.from;
-
-// todo  需要保留     const fromID = this.$store.state.id;
-      this.fromID = fromID;
 
       const socket = this.$store.state.socketModule.socket;
       this.socket = socket;
@@ -115,7 +111,7 @@
       socket.on('syncTime', function (time) {
         _this.messages.push({
           msg: _this.message,
-          from: _this.fromID,
+          from: _this.me_id,
           time: time
         });
 

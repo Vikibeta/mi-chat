@@ -14,13 +14,15 @@ import socketModule from './socketModule'
 const store = new Vuex.Store({
   state: {
     user: {
+      _id: '',
       avatar: 'default.jpg'
     },
     contacts: []
   },
   getters: {
     contacts: state => state.contacts,
-    user: state => state.user
+    user: state => state.user,
+    me_id: (state, getters) => getters.user._id
   },
   mutations: {
     ['SET_USER'](state, user){
@@ -34,7 +36,7 @@ const store = new Vuex.Store({
     ['GET_USER']({commit}, token) {
       axios.get('/api/user').then(({data}) => {
         var {code, data} = data;
-        if(code === '0') {
+        if (code === '0') {
           commit('SET_USER', data);
         }
       })

@@ -16,7 +16,7 @@
 4 verbose stack     at C:\Users\Administrator.USER-20150906ZV\AppData\Roaming\npm\node_modules\.npm_npminstall\node_modules\.3.10.10@npm\node_modules\graceful-fs\graceful-fs.js:78:16
 4 verbose stack     at tryToString (fs.js:448:3)
 4 verbose stack     at FSReqWrap.readFileAfterClose [as oncomplete] (fs.js:435:12)
-5 verbose cwd E:\vue\MI-server
+5 verbose cwd E:\vue\MI-chat\MI-server
 6 error Windows_NT 10.0.14393
 7 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Users\\Administrator.USER-20150906ZV\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js" "run" "dev"
 8 error node v7.7.1

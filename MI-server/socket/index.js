@@ -59,7 +59,7 @@ module.exports = function (io) {
                     // 数据库改变在线状态
                     UserModel.update({_id: decoded._doc._id}, {
                         $set: {
-                            is_online: true
+                            is_online: 1
                         }
                     }).then(doc => {
                         console.log(decoded._doc._id + '已登录');
@@ -195,13 +195,12 @@ module.exports = function (io) {
             // 数据库改变在线状态为离线
             UserModel.update({_id: socket.from_id}, {
                 $set: {
-                    is_online: false
+                    is_online: 0
                 }
-            }, function (err) {
-                console.log(err);
+            }, function (err, doc) {
+                if(err) console.log(err);
+                console.log(socket.from_id + '已离线');
             });
-
-            console.log(socket.from_id + '已离线');
         })
     });
 };

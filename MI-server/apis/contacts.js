@@ -20,7 +20,19 @@ module.exports = function (router) {
         contactsModel
             .find({'MI': user}, 'group_name contacts -_id')
             .populate({
-                path: 'contacts'
+                path: 'contacts',
+                select: {
+                    _id: 1,
+                    avatar: 1,
+                    is_online: 1,
+                    nickname: 1
+                },
+                options: {
+                    sort: {
+                        is_online: -1,
+                        _id: 1
+                    }
+                }
             })
             .exec(function (err, doc) {
                 if (err) {

@@ -56,7 +56,7 @@ export default new VueRouter({
     }, {
       path: '/register', component: Register
     }, {
-      path: '/chat/:to/:from', component: Chat
+      path: '/chat/:to', component: Chat
     }, {
       path: '/add', component: Add
     }, {
