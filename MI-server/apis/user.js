@@ -38,5 +38,35 @@ module.exports = function (router) {
         if (type === 'is_online') {
             findOne(type);
         }
+    });
+
+    router.get('/user/:id', function (req, res) {
+        let id = req.params.id;
+        let queryKeys = Object.keys(req.query);
+        queryKeys.pop();
+
+        // 可以被查询的属性
+        let canQueryKeys = ['nickname', 'is_online', 'avatar'];
+
+        // url是否合法
+        let inCanQuery = queryKeys.every(function (value) {
+            return canQueryKeys.indexOf(value) !== -1 ? true : false;
+        });
+
+        if (inCanQuery) {
+            UserModel.findOne({_id: id}, queryKeys.join(' ')).then(user => {
+                return res.json({
+                    code: '0',
+                    data: user
+                })
+            }).catch(err => {
+                error(err)
+            })
+        } else {
+            return res.json({
+                code: '1',
+                data: 'no permission'
+            })
+        }
     })
 };

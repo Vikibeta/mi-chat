@@ -39,6 +39,7 @@
     },
     mounted(){
       this.getContacts();
+      this.getMessages();
     },
     watch: {
       buttonBarActive: function (status) {
@@ -54,41 +55,15 @@
       }
     },
     methods: {
-      calculateOnlineCount(groupArray){
-        for (let i = 0, len1 = groupArray.length; i < len1; i++) {
-
-          let contactsArray = groupArray[i].contacts;
-          let onlineCount = 0;
-
-          for (let j = 0, len2 = contactsArray.length; j < len2; j++) {
-            if (contactsArray[j].is_online === 0) {
-              break;
-            }
-            onlineCount++;
-          }
-
-          groupArray[i].onlineCount = onlineCount;
-        }
-      },
       getContacts(){
         // 如果之前没有获取过联系人，则获取，做一下缓存
         if (!this.has_get.contacts) {
-          this.$http.get('/api/contacts').then(({data}) => {
-            var {code, data} = data;
-            if (code === '0') {
-              this.calculateOnlineCount(data);
-              this.$store.commit('SET_CONTACTS', data);
-            }
-          });
+          this.$store.dispatch('GET_CONTACTS');
         }
-
+      },
+      getMessages(){
         if (!this.has_get.messages) {
-          this.$http.get('/api/messages').then(({data}) => {
-            var { code, data } = data;
-            if(code === '0') {
-                this.$store.commit('SET_MESSAGES', data);
-            }
-          })
+          this.$store.dispatch('GET_MESSAGES')
         }
       }
     }

@@ -13,7 +13,7 @@
         </div>
       </cell-box>
       <cell-box v-for="(contact, index2) in item.contacts" v-show="foldStatus[index]"
-                :link="{path: `/chat/${contact._id}`}">
+                @click.native="doChat(contact)">
         <div class="contact-item-user">
           <div class="contact-item-user-avatar">
             <img :src="contact.avatar | avatarLocation">
@@ -58,6 +58,23 @@
       toggleFold(index){   //切换联系人列表显示
         const foldStatus = this.foldStatus[index];
         this.$set(this.foldStatus, index, !foldStatus);
+      },
+      doChat(contact){
+        const id = contact._id;
+        const messages = this.$store.getters.messages;
+        let msgList = [];
+        for (let i = 0, len = messages.length; i < len; i++) {
+          if (messages[i].to_Id === id) {
+            msgList = messages[i].msgList;
+            break;
+          }
+        }
+        this.$store.commit('SET_MSG_IN_CHAT', {
+          msgList: msgList.reverse(),
+          msgInfo: contact
+        });
+
+        this.$router.push({path: `/chat/${id}`});
       }
     }
   }

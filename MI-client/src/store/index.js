@@ -11,16 +11,49 @@ Vue.use(Vuex);
 
 import socketModule from './socketModule'
 
+var calculateOnlineCount = function (groupArray) {
+  for (let i = 0, len1 = groupArray.length; i < len1; i++) {
+
+    let contactsArray = groupArray[i].contacts;
+    let onlineCount = 0;
+
+    for (let j = 0, len2 = contactsArray.length; j < len2; j++) {
+      if (contactsArray[j].is_online === 0) {
+        break;
+      }
+      onlineCount++;
+    }
+
+    groupArray[i].onlineCount = onlineCount;
+  }
+};
+
 const store = new Vuex.Store({
+  modules: {
+    socketModule: socketModule
+  },
   state: {
+    // 个人的信息
     user: {
       _id: '',
       avatar: 'default.jpg'
     },
-    contacts: [],
+    // 联系人列表
+    contacts: null,
+    // 消息列表
     messages: [],
-    msg_in_chat: {},
+    // 聊天页的消息显示列表
+    msg_in_chat: {
+      msgList: [],
+      msgInfo: {
+        nickname: '',
+        avatar: '',
+        is_online: -1
+      }
+    },
+    // 对方是否在线
     contacter_is_online: "",
+    // contacts和messages是否已经获取过
     has_get: {
       contacts: false,
       messages: false
@@ -34,6 +67,8 @@ const store = new Vuex.Store({
       let id = getters.me_id;
       let messages = state.messages;
       let temp = [];
+
+
       messages.forEach(function (value) {
         let from_and_to = value._id.split('-');
 
@@ -52,6 +87,7 @@ const store = new Vuex.Store({
           latestMsg: msgList[0]
         })
       });
+
       return temp;
     },
     has_get: state => state.has_get,
@@ -86,10 +122,49 @@ const store = new Vuex.Store({
           commit('SET_USER', data);
         }
       })
+    },
+    ['GET_CONTACTS']({commit}) {
+      axios.get('/api/contacts').then(({data}) => {
+        var {code, data} = data;
+        if (code === '0') {
+          calculateOnlineCount(data);
+          commit('SET_CONTACTS', data);
+        }
+      });
+    },
+    ['GET_MESSAGES']({commit}) {
+      axios.get('/api/messages').then(({data}) => {
+        var {code, data} = data;
+        if (code === '0') {
+          commit('SET_MESSAGES', data);
+        }
+      })
+    },
+    ['GET_MESSAGES_AND_CONTACTS_IN_CHAT']({commit, getters}, id){
+      axios.get('/api/messages').then(({data}) => {
+        var {code, data} = data;
+        if (code === '0') {
+          commit('SET_MESSAGES', data);
+          var messages = getters.messages;
+          var msg_in_chat = {
+            msgList: [],
+            msgInfo: {}
+          };
+          for (let i = 0, len = messages.length; i < len; i++) {
+            if (messages[i].to_Id === id) {
+              msg_in_chat.msgList = messages[i].msgList;
+            }
+          }
+          axios.get(`/api/user/${id}/?nickname=1&avatar=1&is_online=1`,).then(({data}) => {
+            var {code, data} = data;
+            if(code === '0') {
+              msg_in_chat.msgInfo = data;
+            }
+            commit('SET_MSG_IN_CHAT', msg_in_chat);
+          })
+        }
+      })
     }
-  },
-  modules: {
-    socketModule: socketModule
   }
 });
 

@@ -6,7 +6,9 @@
       </span>
       <div class="chat-header-content text-center">
         <p class="chat-header-nickname">{{messages.msgInfo.nickname}}</p>
-        <p class="chat-header-online">{{is_online}}</p>
+        <p class="chat-header-online">
+          {{messages.msgInfo.is_online !== undefined ? messages.msgInfo.is_online : is_online | onlineText}}
+        </p>
       </div>
       <span class="header-icon iconfont text-right icon-people"></span>
     </div>
@@ -70,7 +72,13 @@
     },
     filters: {
       messageTime,
-      avatarLocation
+      avatarLocation,
+      onlineText(value){
+        if (value === -1) {
+          return '';
+        }
+        return value === 0 ? '离线' : '在线'
+      }
     },
     computed: {
       ...mapGetters({
@@ -78,14 +86,20 @@
         messages: 'msg_in_chat'
       })
     },
+    created(){
+      this.toID = this.$route.params.to;
+
+      const contacts = this.$store.getters.contacts;
+
+      if (contacts === null) {
+        this.$store.dispatch('GET_MESSAGES_AND_CONTACTS_IN_CHAT', this.toID);
+      }
+    },
     mounted(){
-
-      textPastePolyfill(this.$refs.input);
-
       const _this = this;
 
-      const toID = this.$route.params.to;
-      this.toID = toID;
+      // 输入框的兼容处理
+      textPastePolyfill(this.$refs.input);
 
       // 得到在线状态
       this.getOnlineStatus();
@@ -93,7 +107,7 @@
       const socket = this.$store.state.socketModule.socket;
       this.socket = socket;
 
-      socket.emit('joinPrivateChat', toID);
+      socket.emit('joinPrivateChat', _this.toID);
 
       // token验证没通过时的前端处理
       socket.on('err', function () {
@@ -118,12 +132,16 @@
     },
     methods: {
       getOnlineStatus(){
-        this.$http.get(`/api/user/${this.toID}/is_online`).then(({data}) => {
-          var {code, data} = data;
-          if (code === '0') {
-            this.is_online = data === 0 ? '离线' : '在线'
-          }
-        })
+        var is_online = this.messages.msgInfo.is_online;
+        // 如果不存在就通过api查询，针对从未读消息页进入的情况
+        if (is_online === undefined) {
+          this.$http.get(`/api/user/${this.toID}/is_online`).then(({data}) => {
+            var {code, data} = data;
+            if (code === '0') {
+              this.is_online = data
+            }
+          })
+        }
       },
       scrollBottom(){
         const scrollPanel = document.getElementById('scroll');
