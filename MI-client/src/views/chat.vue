@@ -19,7 +19,7 @@
              :class="{left: item.from === toID, right: item.from !== toID}">
           <div class="chat-box-top">
             <div class="chat-box-avatar">
-              <img :src="(item.from === toID ? messages.msgInfo.avatar : $store.state.user.avatar) | avatarLocation">
+              <img :src="item.from === toID ? messages.msgInfo.avatar : $store.state.user.avatar | avatarLocation">
             </div>
             <div class="chat-box-content" v-html="item.msg"></div>
             <div class="clearfix"></div>
@@ -98,7 +98,7 @@
     mounted(){
       const _this = this;
 
-      // 输入框的兼容处理
+      // 输入框的复制事件兼容处理
       textPastePolyfill(this.$refs.input);
 
       // 得到在线状态
@@ -116,12 +116,12 @@
 
       // 接收消息
       socket.on('message', function (data) {
-        _this.messages.push(data);
+        _this.messages.msgList.push(data);
       });
 
       // 自己发送消息时 接收服务端时间
       socket.on('syncTime', function (time) {
-        _this.messages.push({
+        _this.messages.msgList.push({
           msg: _this.message,
           from: _this.me_id,
           time: time

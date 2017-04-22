@@ -18,6 +18,7 @@ import Chat from '../views/chat'   // 私聊
 import Add from '../views/add-friend'   // 添加联系人
 import AddExactly from '../views/add-friend-exactly'   // 精确查找
 import AddSelectively from '../views/add-friend-selectively'   // 条件查找
+import User from '../views/user'
 
 
 const routerHome = {
@@ -59,6 +60,8 @@ export default new VueRouter({
       path: '/chat/:to', component: Chat
     }, {
       path: '/add', component: Add
+    }, {
+      path: '/user/:id', component: User
     }, {
       path: '*', redirect: '/login'
     }]

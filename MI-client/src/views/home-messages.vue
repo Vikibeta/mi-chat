@@ -38,21 +38,15 @@
   import {CellBox, Group} from 'vux'
   import {avatarLocation, messageTime} from '../filters'
   import {mapGetters} from 'vuex'
+  import {BODY_CLASS} from '../mixins'
 
   export default {
+    mixins: [BODY_CLASS],
     components: {
       CellBox, Group
     },
     computed: {
       ...mapGetters(['messages'])
-    },
-    beforeRouteEnter(to, from, next){
-      document.body.className = 'body-auto';
-      next()
-    },
-    beforeRouteLeave(to, from, next){
-      document.body.className = '';
-      next();
     },
     filters: {
       avatarLocation, messageTime
