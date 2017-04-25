@@ -3,12 +3,24 @@
     background-repeat: no-repeat;background-position: center center;background-size: auto 100%;position: relative}
   @w: 120px;
   &-avatar{
-    position: absolute;width: @w;height: @w;border-radius: @w;bottom: -@w/2;left: 50%;margin-left: -@w/2}
-  &-info{margin-top: @w/2 + 15;padding: 0 10px;
+    position: absolute;width: @w;height: @w;border-radius: @w;bottom: -@w/2;left: 50%;margin-left: -@w/2;border: 2px solid #fff}
+  &-info{margin-top: @w/2 + 15;
     &-nickname{font-size: 20px;}
-    &-signature{margin-top: 3px;color: #848484}
-    &-sex_loc{margin-top: 3px;
-      .iconfont{font-size: 13px}
+    &-signature{margin-top: 3px;color: #848484;padding: 0 10px;}
+    &-sex_loc{margin-top: 3px;font-size: 13px;
+      *{font-size: 13px}
+      .tip{background-color: #e4e4e4;padding: 3px 8px;border-radius: 3px; color: #fff}
+      .icon-zuobiao{background-color: #fff;color: #000}
+    }
+  }
+
+  .weui-cell{padding: 12px;}
+  .cell-icon{display: block;width: 22px;height: 22px;margin-right: 12px;text-align: center;line-height: 22px;font-size: 22px;color: @background-color * 0.5}
+  .btn-controls{position: fixed; left: 0;bottom: 0;width: 100%;background-color: @background-color;
+    .btn{display: inline-block;width: 49%;margin-bottom: 5px;
+      &:first-of-type{padding: 0 5px 0 10px}
+      &:last-of-type{padding: 0 10px 0 5px}
+      &.block{width: 100%}
     }
   }
 }

@@ -74,7 +74,7 @@
           msgInfo: contact
         });
 
-        this.$router.push({path: `/chat/${id}`});
+        this.$router.push({path: `/user/${id}`});
       }
     }
   }

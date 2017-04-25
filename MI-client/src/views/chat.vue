@@ -135,10 +135,10 @@
         var is_online = this.messages.msgInfo.is_online;
         // 如果不存在就通过api查询，针对从未读消息页进入的情况
         if (is_online === undefined) {
-          this.$http.get(`/api/user/${this.toID}/is_online`).then(({data}) => {
+          this.$http.get(`/api/user/${this.toID}/?is_online=1`).then(({data}) => {
             var {code, data} = data;
             if (code === '0') {
-              this.is_online = data
+              this.is_online = data.is_online;
             }
           })
         }

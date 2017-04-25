@@ -21,32 +21,14 @@ module.exports = function (router) {
         })
     });
 
-    // 查看一些状态的接口
-    // 某些可以查，某些不可以
-    router.get('/user/:id/:type', function (req, res) {
-        const {id, type} = req.params;
-
-        const findOne = function (type) {
-            UserModel.findOne({_id: id}, `${type} -_id`).then(user => {
-                return res.json({
-                    code: '0',
-                    data: user[type]
-                })
-            })
-        };
-
-        if (type === 'is_online') {
-            findOne(type);
-        }
-    });
-
+    // 公共的api
     router.get('/user/:id', function (req, res) {
         let id = req.params.id;
         let queryKeys = Object.keys(req.query);
-        queryKeys.pop();
+        queryKeys.pop(); // 移除token
 
         // 可以被查询的属性
-        let canQueryKeys = ['nickname', 'is_online', 'avatar'];
+        let canQueryKeys = ['nickname', 'is_online', 'avatar', 'signature', 'sex', 'birth'];
 
         // url是否合法
         let inCanQuery = queryKeys.every(function (value) {
