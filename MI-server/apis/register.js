@@ -63,7 +63,8 @@ module.exports = function (router) {
             await UserModel.create({
                 _id,
                 nickname,
-                password: md5Password
+                password: md5Password,
+                groups: ['我的好友']
             }).catch(err => {
                 error(err, res);
             });

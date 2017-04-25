@@ -15,7 +15,8 @@
   }
 
   .weui-cell{padding: 12px;}
-  .cell-icon{display: block;width: 22px;height: 22px;margin-right: 12px;text-align: center;line-height: 22px;font-size: 22px;color: @background-color * 0.5}
+  .cell-icon{display: block;width: 22px;height: 22px;margin-right: 12px;text-align: center;line-height: 22px;font-size: 22px;
+    color: @background-color * 0.5}
   .btn-controls{position: fixed; left: 0;bottom: 0;width: 100%;background-color: @background-color;
     .btn{display: inline-block;width: 49%;margin-bottom: 5px;
       &:first-of-type{padding: 0 5px 0 10px}
@@ -23,6 +24,16 @@
       &.block{width: 100%}
     }
   }
+}
+
+.user-add{
+  .contacter-info{width: 100%;padding: 10px;
+    &-wrap{position: relative;width: 100%;}
+    @avatar-height: 60px;
+    .avatar{position: absolute;left: 0;top: 0;height: @avatar-height;width: @avatar-height;border-radius: @avatar-height}
+    .user-info{margin-top: 0;width: 100%;height: @avatar-height;padding: 10px 0 10px @avatar-height + 10}
+  }
+
 }
 
 @media screen and (max-width: 321px){

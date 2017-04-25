@@ -19,6 +19,7 @@ import Add from '../views/add-friend'   // 添加联系人
 import AddExactly from '../views/add-friend-exactly'   // 精确查找
 import AddSelectively from '../views/add-friend-selectively'   // 条件查找
 import User from '../views/user'
+import UserAdd from '../views/user-add'
 
 
 const routerHome = {
@@ -63,6 +64,8 @@ export default new VueRouter({
     }, {
       path: '/user/:id', component: User
     }, {
+      path: '/userAdd/:id', component: UserAdd
+    },{
       path: '*', redirect: '/login'
     }]
 })

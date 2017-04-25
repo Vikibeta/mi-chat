@@ -42,6 +42,8 @@ const store = new Vuex.Store({
     contacts: null,
     // 消息列表
     messages: [],
+    // 分组列表
+    groups: [],
     // 聊天页的消息显示列表
     msg_in_chat: {
       msgList: [],
@@ -112,6 +114,9 @@ const store = new Vuex.Store({
     },
     ['SET_CONTACTER_IS_ONLINE'](state, is_online) {
       state.contacter_is_online = is_online
+    },
+    ['SET_GROUPS'](state, groups){
+      state.groups = groups;
     }
   },
   actions: {

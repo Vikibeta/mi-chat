@@ -62,19 +62,15 @@ module.exports = function (router) {
 
         const contactsModel = Schema.Contacts;
 
-        const addUserToGroup = async function () {
-            const user = await contactsModel.update({MI: user, group_name: group_name}, {
-                '$addToSet': {'contacts': contacter}
-            }).catch(err => {
-                error(err, res);
-            });
-
+        contactsModel.update({MI: user, group_name: group_name}, {
+            $addToSet: {contacts: contacter}
+        }).then(user => {
             return res.json({
                 code: '0',
                 message: '添加成功'
             })
-        };
-
-        addUserToGroup();
+        }).catch(err => {
+            error(err, res);
+        });
     })
 };

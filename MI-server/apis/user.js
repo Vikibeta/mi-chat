@@ -11,13 +11,27 @@ module.exports = function (router) {
     router.get('/user', function (req, res) {
         const user = req.mi_user;
 
-        UserModel.findOne({_id: user}, "-messages -password -is_online").then(user => {
+        UserModel.findOne({_id: user}, "-messages -password -is_online -groups").then(user => {
             return res.json({
                 code: '0',
                 data: user
             });
         }).catch(err => {
-            error(err);
+            error(err, res);
+        })
+    });
+
+    // 获取分组信息
+    router.get('/user/groups', function (req, res) {
+        const user = req.mi_user;
+
+        UserModel.findOne({_id: user}, "groups -_id").then(user => {
+            return res.json({
+                code: '0',
+                data: user.groups
+            })
+        }).catch(err => {
+            error(err, res);
         })
     });
 
@@ -28,7 +42,7 @@ module.exports = function (router) {
         queryKeys.pop(); // 移除token
 
         // 可以被查询的属性
-        let canQueryKeys = ['nickname', 'is_online', 'avatar', 'signature', 'sex', 'birth'];
+        let canQueryKeys = ['nickname', 'is_online', 'avatar', 'signature', 'sex', 'birth', 'location'];
 
         // url是否合法
         let inCanQuery = queryKeys.every(function (value) {
@@ -42,7 +56,7 @@ module.exports = function (router) {
                     data: user
                 })
             }).catch(err => {
-                error(err)
+                error(err, res)
             })
         } else {
             return res.json({
