@@ -1,6 +1,6 @@
 <template>
   <group>
-    <cell-box v-for="(item, index) in messages" @click.native="doChat(item.msgList, item.msgListInfo)">
+    <cell-box v-for="(item, index) in messages" @click.native="doChat(item)">
       <div class="message-list-item">
         <div class="message-list-content">
           <div class="message-list-content-top">
@@ -52,12 +52,11 @@
       avatarLocation, messageTime
     },
     methods: {
-      doChat(msgList, msgInfo){
+      doChat({index, msgList, msgListInfo}){
         this.$store.commit('SET_MSG_IN_CHAT', {
-          msgList: msgList.reverse(),
-          msgInfo
+          index, msgList, msgListInfo
         });
-        this.$router.push({path: `/chat/${msgInfo._id}`});
+        this.$router.push({path: `/chat/${msgListInfo._id}`});
       }
     }
   }

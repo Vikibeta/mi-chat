@@ -101,9 +101,9 @@
           contacter: this.id,
           group_name: this.defaultGroup
         }).then(({data})=>{
-          var {code} = data;
+          var {code, message} = data;
           if(code === '0') {
-            this.$toast('添加成功');
+            this.$toast(message);
             setTimeout(() =>{
               this.$router.push({path: '/home'})
             },1500)

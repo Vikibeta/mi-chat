@@ -24,7 +24,7 @@ module.exports = function (router) {
                 const response = {
                     code: '0',
                     data: docs.messages.map(function (item) {
-                        item.messages = item.messages.reverse().slice(0, 20);
+                        item.messages = item.messages.slice(-20);
                         return item;
                     })
                 };

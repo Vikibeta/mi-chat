@@ -5,9 +5,9 @@
         <i class="iconfont icon-back"></i>
       </span>
       <div class="chat-header-content text-center">
-        <p class="chat-header-nickname">{{messages.msgInfo.nickname}}</p>
+        <p class="chat-header-nickname">{{messages.msgListInfo.nickname}}</p>
         <p class="chat-header-online">
-          {{messages.msgInfo.is_online !== undefined ? messages.msgInfo.is_online : is_online | onlineText}}
+          {{messages.msgListInfo.is_online !== undefined ? messages.msgListInfo.is_online : is_online | onlineText}}
         </p>
       </div>
       <span class="header-icon iconfont text-right icon-people"></span>
@@ -16,10 +16,10 @@
     <div class="view-wrap chat-view">
       <div class="chat-view-wrap scrollbar" id="scroll">
         <div v-for="(item, index) in messages.msgList" class="chat-box"
-             :class="{left: item.from === toID, right: item.from !== toID}">
+             :class="{left: item.from === to_Id, right: item.from !== to_Id}">
           <div class="chat-box-top">
             <div class="chat-box-avatar">
-              <img :src="item.from === toID ? messages.msgInfo.avatar : $store.state.user.avatar | avatarLocation">
+              <img :src="item.from === to_Id ? messages.msgListInfo.avatar : $store.state.user.avatar | avatarLocation">
             </div>
             <div class="chat-box-content" v-html="item.msg"></div>
             <div class="clearfix"></div>
@@ -66,7 +66,7 @@
       return {
         socket: null,
         message: '',
-        toID: '',
+        to_Id: '',
         is_online: ''
       }
     },
@@ -87,12 +87,13 @@
       })
     },
     created(){
-      this.toID = this.$route.params.to;
+      this.to_Id = this.$route.params.to;
 
       const contacts = this.$store.getters.contacts;
 
+      // 重新刷新本页后的操作
       if (contacts === null) {
-        this.$store.dispatch('GET_MESSAGES_AND_CONTACTS_IN_CHAT', this.toID);
+        this.$store.dispatch('GET_MESSAGES_AND_CONTACTS_IN_CHAT', this.to_Id);
       }
     },
     mounted(){
@@ -107,7 +108,7 @@
       const socket = this.$store.state.socketModule.socket;
       this.socket = socket;
 
-      socket.emit('joinPrivateChat', _this.toID);
+      socket.emit('joinPrivateChat', _this.to_Id);
 
       // token验证没通过时的前端处理
       socket.on('err', function () {
@@ -132,10 +133,10 @@
     },
     methods: {
       getOnlineStatus(){
-        var is_online = this.messages.msgInfo.is_online;
+        var is_online = this.messages.msgListInfo.is_online;
         // 如果不存在就通过api查询，针对从未读消息页进入的情况
         if (is_online === undefined) {
-          this.$http.get(`/api/user/${this.toID}/?is_online=1`).then(({data}) => {
+          this.$http.get(`/api/user/${this.to_Id}/?is_online=1`).then(({data}) => {
             var {code, data} = data;
             if (code === '0') {
               this.is_online = data.is_online;
@@ -174,6 +175,12 @@
       }
     },
     beforeRouteLeave(to, from, next){
+      const msgListLen = this.messages.msgList.length;
+      this.$store.commit('UPDATE_MESSAGES_INDEX', {
+        to_Id: this.to_Id,
+        latestMsg: this.messages.msgList[msgListLen-1],
+        ...this.messages,
+      });
       this.socket.emit('leavePrivateChat');
       next();
     }

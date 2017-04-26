@@ -31,7 +31,7 @@
     <div style="height: 52px"></div>
     <div class="btn-controls">
       <div class="btn">
-        <x-button type="default" v-show="this.fromAdd === '1'">加入通信录</x-button>
+        <x-button type="default" v-show="this.fromAdd === '1'" @click.native="$router.push({path: `/userAdd/${id}`})">加入通信录</x-button>
       </div>
       <div class="btn" :class="{block : this.fromAdd !== '1'}">
         <x-button type="warn" @click.native="$router.push({path: `/chat/${id}`})">发消息</x-button>

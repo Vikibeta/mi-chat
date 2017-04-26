@@ -60,6 +60,13 @@ module.exports = function (router) {
 
         const {contacter, group_name} = req.body;
 
+        if(user === contacter) {
+            return res.json({
+                code: "0",
+                message: "不可以自己加自己哦"
+            })
+        }
+
         const contactsModel = Schema.Contacts;
 
         contactsModel.update({MI: user, group_name: group_name}, {

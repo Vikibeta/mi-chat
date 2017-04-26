@@ -63,15 +63,21 @@
         const id = contact._id;
         const messages = this.$store.getters.messages;
         let msgList = [];
+
+        // index默认为未读消息列表的长度，如果该联系人不在未读消息列表中
+        // 则直接添加到未读消息列表的第一个
+        let index = messages.length;
         for (let i = 0, len = messages.length; i < len; i++) {
           if (messages[i].to_Id === id) {
             msgList = messages[i].msgList;
+            index = i;
             break;
           }
         }
         this.$store.commit('SET_MSG_IN_CHAT', {
           msgList: msgList.reverse(),
-          msgInfo: contact
+          msgListInfo: contact,
+          index
         });
 
         this.$router.push({path: `/user/${id}`});

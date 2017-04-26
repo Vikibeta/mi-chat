@@ -17,6 +17,7 @@ const leavePrivateRoom = function (socket) {
         if (index === -1) { // 第一次互发消息
             user.messages.splice(0, 0, socket.roomName);
         } else {
+            // 移到未读消息列表的第一个
             user.messages.splice(index, 1);
             user.messages.splice(0, 0, socket.roomName);
         }

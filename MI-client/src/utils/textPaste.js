@@ -4,6 +4,7 @@
  * lavyun@163.com
  */
 
+// 对输入文本域的粘贴情况做兼容处理
 export default function (input) {
   input.addEventListener('paste', function (e) {
     var text = null;
