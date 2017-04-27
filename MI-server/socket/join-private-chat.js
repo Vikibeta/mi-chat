@@ -22,7 +22,7 @@ module.exports = function (socket) {
         socket.fromAlias = from < to ? 's' : 'l';
 
         // 需要自增1的数据库模型字段名
-        socket.incProperty = from < to ? 'large_id_info.not_read' : 'small_id_info.not_read';
+        socket.incProperty = from > to ? 'large_id_info.not_read' : 'small_id_info.not_read';
 
         // 是否输入过
         socket.hasInput = false;
@@ -30,47 +30,14 @@ module.exports = function (socket) {
         // 加入房间
         socket.join(socket.roomName);
 
-
-        // 判断 from-to 的文档存不存在， 如果不存在则创建
-        const createMessageDoc = async function () {
-            const message = await MessagesModel.findOne({_id: socket.roomName}).catch(err => {
-                error(err);
-            });
-
+        // 是不是第一次聊天
+        socket.firstChat = false;
+        MessagesModel.findOne({_id: socket.roomName}, "_id").then(message => {
             if (message === null) {
-                let small_id = socket.roomName.substr(0, 6);
-                let large_id = socket.roomName.substr(7, 6);
-
-                const small_id_info = await UserModel.findOne({_id: small_id}, 'nickname avatar').catch(err => {
-                    error(err);
-                });
-
-                const large_id_info = await UserModel.findOne({_id: large_id}, 'nickname avatar').catch(err => {
-                    error(err);
-                });
-
-                await MessagesModel.create({
-                    _id: socket.roomName,
-                    messages: [],
-                    small_id_info: {
-                        _id: small_id_info._id,
-                        avatar: small_id_info.avatar,
-                        nickname: small_id_info.nickname,
-                        not_read: 0
-                    },
-                    large_id_info: {
-                        _id: large_id_info._id,
-                        avatar: large_id_info.avatar,
-                        nickname: large_id_info.nickname,
-                        not_read: 0
-                    }
-                }).catch(err => {
-                    error(err);
-                });
-
+                socket.firstChat = true;
             }
-        };
-
-        createMessageDoc();
+        }).catch(err => {
+            error(err);
+        });
     });
 };

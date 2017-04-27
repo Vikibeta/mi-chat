@@ -99,6 +99,10 @@
     mounted(){
       const _this = this;
 
+      // 一进入聊天页后端就将to_id的未读消息数量置零
+      // 针对用户直接关闭浏览器的情况，不会触发离开路由的函数
+      this.setNotReadToZero();
+
       // 输入框的复制事件兼容处理
       textPastePolyfill(this.$refs.input);
 
@@ -108,26 +112,40 @@
       const socket = this.$store.state.socketModule.socket;
       this.socket = socket;
 
+      // 进入聊天页时默认滚动条在底部
+      const scrollPanel = document.getElementById('scroll');
+      scrollPanel.scrollTop = scrollPanel.scrollHeight;
+//      console.log(scrollPanel.scrollTop);
+//      console.log(scrollPanel.scrollHeight);
+//      setTimeout(function () {
+//        scrollPanel.scrollTop = scrollPanel.scrollHeight;
+//      },500);
+
       socket.emit('joinPrivateChat', _this.to_Id);
 
       // token验证没通过时的前端处理
+      // 使用off解绑，不然会重复触发
+      socket.off('err');
       socket.on('err', function () {
         console.log('error');
       });
 
       // 接收消息
+      socket.off('message');
       socket.on('message', function (data) {
         _this.messages.msgList.push(data);
+        _this.scrollBottom();
       });
 
+
       // 自己发送消息时 接收服务端时间
+      socket.off('syncTime');
       socket.on('syncTime', function (time) {
         _this.messages.msgList.push({
           msg: _this.message,
           from: _this.me_id,
           time: time
         });
-
         _this.scrollBottom();
       })
     },
@@ -148,7 +166,8 @@
         const scrollPanel = document.getElementById('scroll');
         this.$nextTick(function () {
 
-          // 有scrollPanel.scrollTop === scrollPanel.scrollHeight - (document.body.clientHeight - header - input_area)的关系;
+          // 有scrollPanel.scrollTop
+          // === scrollPanel.scrollHeight - (document.body.clientHeight - header - input_area)的关系;
           const clientHeight = document.body.clientHeight;
           const currentScrollTop = scrollPanel.scrollTop;
           const scrollHeight = scrollPanel.scrollHeight;
@@ -172,15 +191,28 @@
         this.message = message;
         this.$refs.input.innerHTML = '';
         this.socket.emit('message', message);
+      },
+      setNotReadToZero(){
+        this.$http.post(`/api/messages/not_read_to_zero/${this.to_Id}`);
       }
     },
     beforeRouteLeave(to, from, next){
       const msgListLen = this.messages.msgList.length;
+
+      // 离开聊天页后端就将to_id的未读消息数量置零
+      // 针对正在聊天时对方发来消息后离开页面
+      this.setNotReadToZero();
+
+      // 前端将to_id的未读消息数量置零
+      this.messages.msgListInfo.not_read = 0;
+
+      // 与该联系人的消息记录排在第一位
       this.$store.commit('UPDATE_MESSAGES_INDEX', {
         to_Id: this.to_Id,
-        latestMsg: this.messages.msgList[msgListLen-1],
+        latestMsg: this.messages.msgList[msgListLen - 1],
         ...this.messages,
       });
+
       this.socket.emit('leavePrivateChat');
       next();
     }

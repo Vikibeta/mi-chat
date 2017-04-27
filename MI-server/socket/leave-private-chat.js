@@ -11,16 +11,11 @@ let UserModel = Schema.User;
 // 离开房间的回调函数
 const leavePrivateRoom = function (socket) {
     function toFirst(user) {
-        let messages = user.messages;
-        let index = messages.indexOf(socket.roomName);
+        let index = user.messages.indexOf(socket.roomName);
 
-        if (index === -1) { // 第一次互发消息
-            user.messages.splice(0, 0, socket.roomName);
-        } else {
-            // 移到未读消息列表的第一个
-            user.messages.splice(index, 1);
-            user.messages.splice(0, 0, socket.roomName);
-        }
+        user.messages.splice(index, 1);
+        user.messages.splice(0, 0, socket.roomName);
+
         user.save();
     }
 

@@ -37,6 +37,11 @@
       XButton,
       MHeader
     },
+    watch:{
+      id: function (value) {
+        this.nickname = value;
+      }
+    },
     methods: {
       doRegister(){
         const {id, nickname, password, password1, $toast} = this;
