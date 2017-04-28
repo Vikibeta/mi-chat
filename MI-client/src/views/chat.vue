@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header chat-header " style="padding: 4px 0">
-      <span class="header-back text-left" @click="$router.push({path:'/home'})">
+      <span class="header-back text-left" @click="$router.push({path:'/home/messages'})">
         <i class="iconfont icon-back"></i>
       </span>
       <div class="chat-header-content text-center">

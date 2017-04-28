@@ -42,7 +42,7 @@
           var { code, data } = data;
           if(code === '0') {
             this.$store.commit('SET_USER', data);
-            this.$router.push({path: '/home'});
+            this.$router.push({path: '/home/messages'});
           }
         })
       }
@@ -85,7 +85,7 @@
             if (window.localStorage) {
               window.localStorage.setItem('mi_token', token);
             }
-            this.$router.push({path: '/home'});  // 转到home页面
+            this.$router.push({path: '/home/messages'});  // 转到home页面
           }
         })
       },

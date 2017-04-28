@@ -38,8 +38,13 @@
       avatarLocation
     },
     mounted(){
+      const path = this.$route.path;
+      const subPath = path.substr(6);
+      this.buttonBarActive = subPath === 'messages' ? 0 : 1;
+
       this.getContacts();
       this.getMessages();
+
     },
     watch: {
       buttonBarActive: function (status) {

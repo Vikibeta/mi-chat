@@ -68,7 +68,7 @@ const store = new Vuex.Store({
     me_id: (state, getters) => getters.user._id,
     contacts: state => state.contacts,
     messages: (state, getters) => {
-      if(state.messages.length ===0) {
+      if (state.messages.length === 0) {
         let id = getters.me_id;
         let native_messages = state.native_messages;
         let temp = [];
@@ -120,7 +120,7 @@ const store = new Vuex.Store({
     ['SET_CONTACTER_IS_ONLINE'](state, is_online) {
       state.contacter_is_online = is_online
     },
-    ['SET_GROUPS'](state, groups){
+    ['SET_GROUPS'](state, groups) {
       state.groups = groups;
     },
     // 更新未读消息列表的顺序和内容
@@ -136,6 +136,22 @@ const store = new Vuex.Store({
 
       state.messages.splice(index, 1);
       state.messages.splice(0, 0, msg);
+    },
+    ['UPDATE_CONTACTS'](state, contact) {
+      const group_name = contact.group_name;
+      const contact_info = contact.contact_info;
+      const is_online = contact_info.is_online;
+      const contacts = state.contacts;
+
+      for (let i = 0; i < contacts.length; i++) {
+        if(group_name === contacts[i].group_name) {
+          if(is_online === 1) {
+            state.contacts[i].onlineCount++;
+          }
+
+          state.contacts[i].contacts.push(contact_info);
+        }
+      }
     }
   },
   actions: {

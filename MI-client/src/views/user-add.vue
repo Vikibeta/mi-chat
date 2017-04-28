@@ -32,8 +32,10 @@
   import {mapGetters} from 'vuex'
   import dataToQuery from '../utils/dataToQuery'
   import {avatarLocation} from '../filters'
+  import {BODY_CLASS} from '../mixins'
 
   export default {
+    mixins: [BODY_CLASS],
     components: {
       MHeader,
       Group,
@@ -42,7 +44,7 @@
     },
     data(){
       return {
-        id: '',
+        contacter_id: '',
         user: {},
         groups: [],
         defaultGroup: ''
@@ -58,6 +60,11 @@
         const birth = this.user.birth;
         const birthYear = birth && parseInt(birth.substr(0, 4));
         return cYear - birthYear + 1;
+      }
+    },
+    created(){
+      if (this.$store.state.contacts === null) {
+        this.$store.dispatch('GET_CONTACTS');
       }
     },
     mounted(){
@@ -83,9 +90,9 @@
         }
       },
       getUserInfo(){  // 获取联系人信息
-        this.id = this.$route.params.id;
-        const data = ['avatar', 'location', 'sex', 'birth', 'nickname'];
-        this.$http.get(`/api/user/${this.id}/?${dataToQuery(data)}`).then(({data}) => {
+        this.contacter_id = this.$route.params.id;
+        const data = ['avatar', 'location', 'sex', 'birth', 'nickname', 'is_online'];
+        this.$http.get(`/api/user/${this.contacter_id}/?${dataToQuery(data)}`).then(({data}) => {
           var {code, data} = data;
           if (code === '0') {
             this.user = data;
@@ -93,21 +100,52 @@
         })
       },
       doAdd(){
-        if(this.me_id === this.id) {
-          this.$toast('不可以自己加自己哦');
+        // 验证
+        if (this.doAddValidate() === false) {
           return;
         }
+
         this.$http.post('/api/contacts', {
-          contacter: this.id,
+          contacter: this.contacter_id,
           group_name: this.defaultGroup
-        }).then(({data})=>{
+        }).then(({data}) => {
           var {code, message} = data;
-          if(code === '0') {
+          if (code === '0') {
             this.$toast(message);
-            setTimeout(() =>{
-              this.$router.push({path: '/home'})
-            },1500)
+            this.addToStore();
+            setTimeout(() => {
+              this.$router.push({path: '/home/contacts'})
+            }, 1500)
           }
+        })
+      },
+      doAddValidate(){
+        const _this = this;
+
+        if (this.me_id === this.contacter_id) {
+          this.$toast('不可以自己加自己哦');
+          return false;
+        }
+
+        const contacts = this.$store.state.contacts;
+        for (let i = 0; i < contacts.length; i++) {
+          if (contacts[i].group_name === this.defaultGroup) {
+            const group = contacts[i].contacts;
+            for (let j = 0, len = group.length; j < len; j++) {
+              if (group[j]._id === this.contacter_id) {
+                this.$toast(`${_this.user.sex === 0 ? '他' : '她'}已经是你的好友了哦`);
+                return false;
+              }
+            }
+          }
+        }
+      },
+      addToStore(){
+        const {_id, avatar, nickname, is_online} = this.user;
+        const user = {_id, avatar, nickname, is_online};
+        this.$store.commit('UPDATE_CONTACTS', {
+          group_name: this.defaultGroup,
+          contact_info: user
         })
       }
     }

@@ -31,7 +31,6 @@ module.exports = function (socket) {
 
 
             // 给自己发送服务器的时间，以防客户端时间不同步
-            console.log(1);
             socket.emit('syncTime', Date.now());
 
             // 存库
