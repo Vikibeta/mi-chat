@@ -20,6 +20,11 @@ import AddExactly from '../views/add-friend-exactly'   // 精确查找
 import AddSelectively from '../views/add-friend-selectively'   // 条件查找
 import User from '../views/user'
 import UserAdd from '../views/user-add'
+import Me from '../views/me'
+import Setting from '../views/setting/index'
+import SettingList from '../views/setting/list'
+import SettingPerson from '../views/setting/person'
+import SettingSystem from '../views/setting/system'
 
 
 const routerHome = {
@@ -45,12 +50,26 @@ const routerAdd = {
 };
 
 
+const routerSetting = {
+  path: '/setting', component: Setting,
+  children: [{
+    path: '', component: SettingList
+  },{
+    path: 'list', component: SettingList
+  },{
+    path: 'person', component: SettingPerson
+  }, {
+    path: 'system', component: SettingSystem
+  }]
+};
+
 
 // 导出router
 export default new VueRouter({
   routes: [
     routerHome,
     routerAdd,
+    routerSetting,
     {
       path: '/login', component: Login
     }, {
@@ -65,6 +84,8 @@ export default new VueRouter({
       path: '/user/:id', component: User
     }, {
       path: '/userAdd/:id', component: UserAdd
+    },{
+      path: '/me', component: Me
     },{
       path: '*', redirect: '/login'
     }]

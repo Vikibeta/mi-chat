@@ -7,7 +7,7 @@
           <img :src="user.avatar | avatarLocation" class="avatar">
           <div class="user-info">
             <p class="nickname"><strong>{{user.nickname}}</strong></p>
-            <p>{{user.sex === 0 ? '男' : '女'}}&nbsp;&nbsp;{{age}} 岁&nbsp;&nbsp;{{user.location}}</p>
+            <p>{{user.sex}}&nbsp;&nbsp;{{age}} 岁&nbsp;&nbsp;{{user.location}}</p>
           </div>
         </div>
       </div>
@@ -32,10 +32,8 @@
   import {mapGetters} from 'vuex'
   import dataToQuery from '../utils/dataToQuery'
   import {avatarLocation} from '../filters'
-  import {BODY_CLASS} from '../mixins'
 
   export default {
-    mixins: [BODY_CLASS],
     components: {
       MHeader,
       Group,

@@ -8,9 +8,12 @@
     </button-tab>
 
     <group style="margin-top: 30px;">
-      <popup-picker title="年龄" :data="ageList" v-model="ageDefault" :display-format="ageFormat" class="selectively-item"></popup-picker>
-      <popup-picker title="星座" :data="constellationList" v-model="constellationDefault"  class="selectively-item"></popup-picker>
-      <x-address title="所在地" v-model="cityDefault" raw-value :list="cityList" hide-district class="selectively-item"></x-address>
+      <popup-picker title="年龄" :data="ageList" v-model="ageDefault" :display-format="ageFormat"
+                    class="selectively-item"></popup-picker>
+      <popup-picker title="星座" :data="constellationList" v-model="constellationDefault"
+                    class="selectively-item"></popup-picker>
+      <x-address title="所在地" v-model="cityDefault" raw-value :list="cityList" hide-district
+                 class="selectively-item"></x-address>
     </group>
 
     <div style="margin-top: 30px;padding: 0 20px;">
@@ -37,11 +40,11 @@
         ageDefault: [18, 26],
         cityList: ChinaAddressV3Data,
         cityDefault: [],
-        constellationList: [['不限','白羊座','金牛座','双子座','巨蟹座','狮子座','处女座','天秤座','天蝎座','射手座','摩羯座','水瓶座','双鱼座']],  //星座
+        constellationList: [['不限', '白羊座', '金牛座', '双子座', '巨蟹座', '狮子座', '处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座']],  //星座
         constellationDefault: ['不限'],
         ageFormat: function (value, name) {
-        return `${value[0]}-${value[1]}岁`
-      },
+          return `${value[0]}-${value[1]}岁`
+        },
       }
     },
     mounted(){

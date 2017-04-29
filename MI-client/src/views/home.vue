@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="home-header">
-      <div class="home-header-avatar" @click="$router.push({path:'/user/44'})">
+      <div class="home-header-avatar" @click="$router.push({path:'/me'})">
         <img :src="user.avatar | avatarLocation">
       </div>
       <div class="button-bar">

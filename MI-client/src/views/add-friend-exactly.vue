@@ -45,11 +45,9 @@
 <script>
   import {Group, XInput, CellBox} from 'vux'
   import dataToQuery from '../utils/dataToQuery'
-  import {BODY_CLASS} from '../mixins'
   import {avatarLocation} from '../filters'
 
   export default {
-    mixins: [BODY_CLASS],
     components: {
       Group,
       XInput,

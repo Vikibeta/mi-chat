@@ -38,10 +38,8 @@
   import {CellBox, Group} from 'vux'
   import {avatarLocation, messageTime} from '../filters'
   import {mapGetters} from 'vuex'
-  import {BODY_CLASS} from '../mixins'
 
   export default {
-    mixins: [BODY_CLASS],
     components: {
       CellBox, Group
     },

@@ -65,6 +65,19 @@ const store = new Vuex.Store({
   },
   getters: {
     user: state => state.user,
+    user_in_setting: (state, getters) => {
+      const user = getters.user;
+
+      return {
+        nickname: user.nickname,
+        sex: [user.sex],
+        birth: user.birth,
+        company: user.company || '',
+        profession: user.profession || '',
+        location: [user.location],
+        signature: user.signature || ''
+      }
+    },
     me_id: (state, getters) => getters.user._id,
     contacts: state => state.contacts,
     messages: (state, getters) => {

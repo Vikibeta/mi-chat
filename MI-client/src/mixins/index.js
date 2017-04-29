@@ -1,7 +1,7 @@
 module.exports =  {
-  'BODY_CLASS': {
+  'BODY_FIXED': {
     beforeRouteEnter(to, from, next){
-      document.body.className = 'body-auto';
+      document.body.className = 'body-fixed';
       next()
     },
     beforeRouteLeave(to, from, next){

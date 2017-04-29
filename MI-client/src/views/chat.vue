@@ -60,8 +60,10 @@
   import {messageTime, avatarLocation} from '../filters'
   import {mapGetters} from 'vuex'
   import textPastePolyfill from '../utils/textPaste';
+  import {BODY_FIXED} from '../mixins'
 
   export default {
+    mixins: [BODY_FIXED],
     data(){
       return {
         socket: null,

@@ -14,7 +14,7 @@
         <div class="user-info-sex_loc text-center">
           <span class="iconfont tip"
                 :style="{'background-color': (user.sex === 0 ? 'lightskyblue' : 'rgb(246,152,179)')}">
-            {{user.sex === 0 ? '男' : '女'}}&nbsp;&nbsp;{{age}} 岁&nbsp;&nbsp;安徽 - 合肥
+            {{user.sex}}&nbsp;&nbsp;{{age}} 岁&nbsp;&nbsp;安徽 - 合肥
           </span>
         </div>
         <group style="margin-top: 15px;">
@@ -46,9 +46,7 @@
   import dataToQuery from '../utils/dataToQuery'
   import {avatarLocation} from '../filters'
 
-  import {BODY_CLASS} from '../mixins'
   export default {
-    mixins: [BODY_CLASS],
     components: {
       MHeader,
       Group,
