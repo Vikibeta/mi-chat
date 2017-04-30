@@ -50,7 +50,7 @@ var vm = new Vue({
   components: { App }
 });
 
-vm.__proto__.$toast = function (value) {
+vm.__proto__.$toast = function (value, back) {
   vm.$vux.toast.show({
     type: 'text',
     position: 'middle',
@@ -59,6 +59,7 @@ vm.__proto__.$toast = function (value) {
 
   setTimeout(() => {
     vm.$vux.toast.hide();
+    if(back) router.go(-1);
   },2000);
 };
 

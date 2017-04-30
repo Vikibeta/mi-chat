@@ -113,7 +113,7 @@
             this.addToStore();
             setTimeout(() => {
               this.$router.push({path: '/home/contacts'})
-            }, 1500)
+            }, 2000)
           }
         })
       },

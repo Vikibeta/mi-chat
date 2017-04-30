@@ -70,15 +70,14 @@ const store = new Vuex.Store({
 
       return {
         nickname: user.nickname,
-        sex: [user.sex],
         birth: user.birth,
         company: user.company || '',
         profession: user.profession || '',
-        location: [user.location],
         signature: user.signature || ''
       }
     },
     me_id: (state, getters) => getters.user._id,
+    avatar: (state, getters) => getters.user.avatar,
     contacts: state => state.contacts,
     messages: (state, getters) => {
       if (state.messages.length === 0) {
@@ -117,6 +116,15 @@ const store = new Vuex.Store({
   mutations: {
     ['SET_USER'](state, user) {
       state.user = user;
+    },
+    ['UPDATE_USER'](state, user) {
+      const _user = state.user;
+
+      for (let i in user) {
+        if (user.hasOwnProperty(i)) {
+          _user[i] = user[i];
+        }
+      }
     },
     ['SET_CONTACTS'](state, contacts) {
       state.contacts = contacts;
@@ -157,8 +165,8 @@ const store = new Vuex.Store({
       const contacts = state.contacts;
 
       for (let i = 0; i < contacts.length; i++) {
-        if(group_name === contacts[i].group_name) {
-          if(is_online === 1) {
+        if (group_name === contacts[i].group_name) {
+          if (is_online === 1) {
             state.contacts[i].onlineCount++;
           }
 
