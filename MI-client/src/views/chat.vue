@@ -16,28 +16,16 @@
     <div class="view-wrap chat-view">
       <div class="chat-view-wrap scrollbar" id="scroll">
         <div v-for="(item, index) in messages.msgList" class="chat-box"
-             :class="{left: item.from === to_Id, right: item.from !== to_Id}">
+             :class="{left: item.from === to_id, right: item.from !== to_id}">
           <div class="chat-box-top">
             <div class="chat-box-avatar">
-              <img :src="item.from === to_Id ? messages.msgListInfo.avatar : $store.state.user.avatar | avatarLocation">
+              <img :src="item.from === to_id ? messages.msgListInfo.avatar : $store.state.user.avatar | avatarLocation">
             </div>
             <div class="chat-box-content" v-html="item.msg"></div>
             <div class="clearfix"></div>
           </div>
           <span class="chat-box-time">{{item.time | messageTime}}</span>
         </div>
-
-        <!--<div v-for="i in 100" class="chat-box left">-->
-        <!--<div class="chat-box-top">-->
-        <!--<div class="chat-box-avatar">-->
-        <!--<img src="http://placehold.it/50x50">-->
-        <!--</div>-->
-        <!--<div class="chat-box-content">{{i}}</div>-->
-        <!--<div class="clearfix"></div>-->
-        <!--</div>-->
-        <!--<span class="chat-box-time">sss</span>-->
-        <!--</div>-->
-
         <div style="height: 20px;"></div>
       </div>
 
@@ -58,7 +46,7 @@
 
 <script>
   import {messageTime, avatarLocation} from '../filters'
-  import {mapGetters} from 'vuex'
+  import {mapGetters, mapState} from 'vuex'
   import textPastePolyfill from '../utils/textPaste';
   import {BODY_FIXED} from '../mixins'
 
@@ -68,8 +56,10 @@
       return {
         socket: null,
         message: '',
-        to_Id: '',
-        is_online: ''
+        to_id: '',
+        is_online: '',
+        has_input: false,  // 是否输入过
+        is_pass_router_validate: true //是否经过离开的路由钩子的验证
       }
     },
     filters: {
@@ -88,18 +78,26 @@
         messages: 'msg_in_chat'
       })
     },
+    watch: {
+      me_id(value){
+        this.validate(value);
+      }
+    },
     created(){
-      this.to_Id = this.$route.params.to;
+      this.to_id = this.$route.params.to;
 
       const contacts = this.$store.getters.contacts;
 
       // 重新刷新本页后的操作
       if (contacts === null) {
-        this.$store.dispatch('GET_MESSAGES_AND_CONTACTS_IN_CHAT', this.to_Id);
+        this.$store.dispatch('GET_MESSAGES_AND_CONTACTS_IN_CHAT', this.to_id);
       }
     },
     mounted(){
       const _this = this;
+
+      // 验证是不是跟自己聊天，是不是自己的好友
+      if (this.me_id) this.validate(this.me_id);
 
       // 一进入聊天页后端就将to_id的未读消息数量置零
       // 针对用户直接关闭浏览器的情况，不会触发离开路由的函数
@@ -123,7 +121,7 @@
 //        scrollPanel.scrollTop = scrollPanel.scrollHeight;
 //      },500);
 
-      socket.emit('joinPrivateChat', _this.to_Id);
+      socket.emit('joinPrivateChat', _this.to_id);
 
       // token验证没通过时的前端处理
       // 使用off解绑，不然会重复触发
@@ -156,7 +154,7 @@
         var is_online = this.messages.msgListInfo.is_online;
         // 如果不存在就通过api查询，针对从未读消息页进入的情况
         if (is_online === undefined) {
-          this.$http.get(`/api/user/${this.to_Id}/?is_online=1`).then(({data}) => {
+          this.$http.get(`/api/user/${this.to_id}/?is_online=1`).then(({data}) => {
             var {code, data} = data;
             if (code === '0') {
               this.is_online = data.is_online;
@@ -189,34 +187,49 @@
         })
       },
       sendMessage(){
+        // 判断时候输入过，如果输入过，离开此页时，该聊天消息排在所有消息的第一位
+        if (this.has_input === false) this.has_input = true;
+
         const message = this.$refs.input.innerHTML;
+        console.log(message);
         this.message = message;
         this.$refs.input.innerHTML = '';
         this.socket.emit('message', message);
       },
       setNotReadToZero(){
-        this.$http.post(`/api/messages/not_read_to_zero/${this.to_Id}`);
+        this.$http.post(`/api/messages/not_read_to_zero/${this.to_id}`);
+      },
+      validate(me_id){
+        if (me_id === this.to_id) {
+          this.is_pass_router_validate = false;
+          this.$router.push({path: '/home/messages'});
+        }
       }
     },
-    beforeRouteLeave(to, from, next){
-      const msgListLen = this.messages.msgList.length;
+    beforeRouteLeave(to, from, next) {
+      if (this.is_pass_router_validate === false) next();
+      else {
+        const msgListLen = this.messages.msgList.length;
 
-      // 离开聊天页后端就将to_id的未读消息数量置零
-      // 针对正在聊天时对方发来消息后离开页面
-      this.setNotReadToZero();
+        // 离开聊天页后端就将to_id的未读消息数量置零
+        // 针对正在聊天时对方发来消息后离开页面
+        this.setNotReadToZero();
 
-      // 前端将to_id的未读消息数量置零
-      this.messages.msgListInfo.not_read = 0;
+        // 前端将to_id的未读消息数量置零
+        this.messages.msgListInfo.not_read = 0;
 
-      // 与该联系人的消息记录排在第一位
-      this.$store.commit('UPDATE_MESSAGES_INDEX', {
-        to_Id: this.to_Id,
-        latestMsg: this.messages.msgList[msgListLen - 1],
-        ...this.messages,
-      });
+        // 如果输入过，与该联系人的消息记录排在第一位
+        if(this.has_input === true) {
+          this.$store.commit('UPDATE_MESSAGES_INDEX', {
+            to_id: this.to_id,
+            latestMsg: this.messages.msgList[msgListLen - 1],
+            ...this.messages,
+          });
+        }
 
-      this.socket.emit('leavePrivateChat');
-      next();
+        this.socket.emit('leavePrivateChat');
+        next();
+      }
     }
   }
 </script>

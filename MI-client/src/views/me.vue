@@ -15,18 +15,18 @@
             {{user.sex}}&nbsp;&nbsp;{{age}} 岁&nbsp;&nbsp;{{user.location | locationFilter}}
           </span>
         </div>
-        <group style="margin-top: 15px;">
+        <group style="margin-top: 10px;">
           <cell :title="user._id">
             <span slot="icon" class="iconfont icon-myfill cell-icon"></span>
           </cell>
-          <cell link="/setting/person" :title="user.signature">
+          <cell link="/setting/person" :title="user.signature || '未设置'">
             <span slot="icon" class="iconfont icon-qianming cell-icon"></span>
           </cell>
         </group>
       </div>
     </div>
 
-    <group style="margin-top: 15px;">
+    <group style="margin: 10px 0;">
       <cell :title="user.location | locationFilter" link="/setting/person">
         <span slot="icon" class="iconfont icon-zuobiao1 cell-icon"></span>
       </cell>
@@ -40,8 +40,6 @@
         <span slot="icon" class="iconfont icon-zhiye cell-icon"></span>
       </cell>
     </group>
-
-    <div style="height: 15px;"></div>
   </div>
 </template>
 
@@ -65,7 +63,8 @@
       avatarLocation,
       locationFilter(value){
         if (value && value !== '中国') {
-          return value2name(value.split('-'), ChinaAddressV3Data);
+          const loc = value2name(value.split('-'), ChinaAddressV3Data);
+          return loc.replace(/[省市辖区]/g, '');
         }
 
         return value;

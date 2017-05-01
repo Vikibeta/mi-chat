@@ -58,39 +58,9 @@ module.exports = function (router) {
         })
     });
 
-    // 公共的api
-    router.get('/user/:id', function (req, res) {
-        let id = req.params.id;
-        let queryKeys = Object.keys(req.query);
-        queryKeys.pop(); // 移除token
-
-        // 可以被查询的属性
-        let canQueryKeys = ['nickname', 'is_online', 'avatar', 'signature', 'sex', 'birth', 'location'];
-
-        // url是否合法
-        let inCanQuery = queryKeys.every(function (value) {
-            return canQueryKeys.indexOf(value) !== -1 ? true : false;
-        });
-
-        if (inCanQuery) {
-            UserModel.findOne({_id: id}, queryKeys.join(' ')).then(user => {
-                return res.json({
-                    code: '0',
-                    data: user
-                })
-            }).catch(err => {
-                error(err, res)
-            })
-        } else {
-            return res.json({
-                code: '1',
-                data: 'no permission'
-            })
-        }
-    });
-
     // 更新头像
     router.put('/user/avatar', function (req, res) {
+        const user = req.mi_user;
         const form = new formidable.IncomingForm();
         form.uploadDir = './public/tmp';
         form.encoding = 'utf-8';
@@ -133,7 +103,16 @@ module.exports = function (router) {
 
                     // 删除临时文件
                     fs.unlink(filePath, function (err) {
-                        if(err) error(err, res);
+                        if (err) error(err, res);
+                    });
+
+                    // 将新的头像文件名写入数据库
+                    UserModel.update({_id: user}, {
+                        $set: {
+                            avatar: ret.key
+                        }
+                    }).then().catch(err => {
+                        error(err, res);
                     });
 
                     return res.json({

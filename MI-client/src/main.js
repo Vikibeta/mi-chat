@@ -9,7 +9,7 @@ import io from 'socket.io-client'
 import router from './router'
 import store from './store'
 import ramPolyfill from './utils/requestAnimationFramePolyfill';
-import { ToastPlugin } from 'vux'
+import { ToastPlugin, cookie, ConfirmPlugin } from 'vux'
 
 import './assets/css/neat-min.css'
 import './assets/css/style.less'
@@ -19,9 +19,10 @@ ramPolyfill();  // requestAnimationFrame的Polyfill
 Vue.config.productionTip = false;
 
 Vue.use(ToastPlugin);
+Vue.use(ConfirmPlugin);
 
 Axios.defaults.params = {
-  token: window.localStorage ? window.localStorage.getItem('mi_token') : ''
+  token: cookie.get('mi_afdaefe95e9d7e12') || ''
 };
 
 Vue.prototype.$http = Axios;
@@ -33,13 +34,15 @@ router.beforeEach((to, from, next) => {
   // socket断线重连  登录，注册，忘记密码页面除外
   // 刷新页面重新获取个人信息
   if(to.path !== ('/login' || '/register' || '/forget') && store.state.socketModule.socket === null) {
-    let token = localStorage.getItem('mi_token');
-    store.dispatch('GET_USER');
-    store.dispatch('SOCKET_CON', token);
+    let token = cookie.get('mi_afdaefe95e9d7e12') || '';
+    if(token === '') next('/login');
+    else {
+      store.dispatch('GET_USER');
+      store.dispatch('SOCKET_CON', token);
+    }
   }
   next();
 });
-
 
 /* eslint-disable no-new */
 var vm = new Vue({

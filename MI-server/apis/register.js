@@ -14,7 +14,7 @@ module.exports = function (router) {
     router.post('/user', function (req, res) {
         const user = req.body;
 
-        const {id:_id, nickname, password, password1} = user;
+        const {id: _id, nickname, password, password1} = user;
 
         const findUser = async function () {
 
@@ -57,7 +57,7 @@ module.exports = function (router) {
                 });
             }
 
-            const md5Password = utils.md5(password);
+            const md5Password = utils.md5(_id + password);
 
             // 添加到用户表中
             await UserModel.create({

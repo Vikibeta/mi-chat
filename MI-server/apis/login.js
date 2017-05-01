@@ -14,14 +14,14 @@ module.exports = function (router) {
     router.post('/authentication', function (req, res) {
         const {id: _id, password} = req.body;
 
-        const md5Password = utils.md5(password);  // 密码hash化
+        const md5Password = utils.md5(_id + password);  // 密码hash化
 
         const userModel = Schema.User;
 
         const doAuth = async function () {
             const user = await userModel.findOne({
                 _id, password: md5Password
-            },"-messages -password -is_online").catch(err => {
+            }, "_id").catch(err => {
                 error(err, res);
             });
 
@@ -32,6 +32,10 @@ module.exports = function (router) {
                 });
             }
 
+            return user;
+        };
+
+        doAuth().then(function (user) {
             const token = jwt.sign(user, config.jwtSecret, {
                 expiresIn: 60 * 60 * 24 * 15
             });
@@ -40,11 +44,9 @@ module.exports = function (router) {
                 code: '0',
                 message: '登录成功',
                 data: {
-                    user,token
+                    user, token
                 }
             })
-        };
-
-        doAuth();
+        });
     })
 };

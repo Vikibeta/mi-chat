@@ -56,7 +56,15 @@
       }
     },
     computed: {
-      ...mapGetters({user: 'user_in_setting'}),
+      ...mapGetters(['user']),
+    },
+    watch: {
+      user(user){
+        const sex = user.sex;
+        const location = user.location;
+        this.sex.push(sex);
+        if (location !== '中国') this.location = location.split('-');
+      }
     },
     mounted(){
       const storeUser = this.$store.state.user;
@@ -64,14 +72,6 @@
       if (sex) {
         this.sex.push(sex);
         if (storeUser.location !== '中国') this.location = storeUser.location.split('-');
-      } else {
-        this.$http.get('/api/user').then(({data}) => {
-          var {code, data} = data;
-          if (code === '0') {
-            this.sex.push(data.sex);
-            if (data.location !== '中国') this.location = data.location.split('-');
-          }
-        })
       }
     },
     methods: {
@@ -88,7 +88,6 @@
         this.$http.put('/api/user', afterUpdate).then(({data}) => {
           var {code, data} = data;
           if (code === '0') {
-            console.log(afterUpdate);
             this.$store.commit('UPDATE_USER', afterUpdate);
             this.$toast('修改成功', true);
 

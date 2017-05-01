@@ -5,7 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var jsonWebToken = require('jsonwebtoken');
 var socket = require('socket.io');
 var server = require('./bin/www');
 

@@ -6,6 +6,7 @@ var config = require('../config');
 
 var register = require('./register');
 var login = require('./login');
+var userCommon = require('./user-common');
 var user = require('./user');
 var contacts = require('./contacts');
 var messages = require('./messages');
@@ -13,6 +14,7 @@ var messages = require('./messages');
 module.exports = function () {
     register(router);
     login(router);
+    userCommon(router);
 
     router.use(function (req, res, next) {
         const token = req.body.token || req.query.token;

@@ -10,11 +10,13 @@
         <div class="user-info-signature text-ellipsis text-center" v-if="user.signature && user.signature.length !== 0">
           {{user.signature}}
 
+
+
         </div>
         <div class="user-info-sex_loc text-center">
           <span class="iconfont tip"
                 :style="{'background-color': (user.sex === '男' ? 'lightskyblue' : 'rgb(246,152,179)')}">
-            {{user.sex}}&nbsp;&nbsp;{{age}} 岁&nbsp;&nbsp;安徽 - 合肥
+            {{user.sex}}&nbsp;&nbsp;{{age}} 岁&nbsp;&nbsp;{{user.location | locationFilter}}
           </span>
         </div>
         <group style="margin-top: 15px;">
@@ -28,10 +30,22 @@
       </div>
     </div>
 
+    <group style="margin-top: 10px">
+      <cell :title="user.company || '无业游民'">
+        <span slot="icon" class="iconfont icon-gongsi cell-icon"></span>
+      </cell>
+      <cell :title="user.profession || '无业游民'">
+        <span slot="icon" class="iconfont icon-zhiye cell-icon"></span>
+      </cell>
+    </group>
+
     <div style="height: 52px"></div>
     <div class="btn-controls">
-      <div class="btn">
-        <x-button type="default" v-show="this.fromAdd === '1'" @click.native="$router.push({path: `/userAdd/${id}`})">加入通信录</x-button>
+      <div class="btn" v-show="this.fromAdd === '1'">
+        <x-button type="default" @click.native="$router.push({path: `/userAdd/${id}`})">
+          加入通信录
+
+        </x-button>
       </div>
       <div class="btn" :class="{block : this.fromAdd !== '1'}">
         <x-button type="warn" @click.native="$router.push({path: `/chat/${id}`})">发消息</x-button>
@@ -42,7 +56,7 @@
 
 <script>
   import MHeader from '../components/header'
-  import {Group, Cell, XButton} from 'vux'
+  import {Group, Cell, XButton, ChinaAddressV3Data, Value2nameFilter as value2name} from 'vux'
   import dataToQuery from '../utils/dataToQuery'
   import {avatarLocation} from '../filters'
 
@@ -57,7 +71,9 @@
       return {
         id: '',
         fromAdd: '1',
-        user: {}
+        user: {
+          avatar: 'default.jpg'
+        }
       }
     },
     computed: {
@@ -69,7 +85,15 @@
       }
     },
     filters: {
-      avatarLocation
+      avatarLocation,
+      locationFilter(value){
+        if (value && value !== '中国') {
+          const loc = value2name(value.split('-'), ChinaAddressV3Data);
+          return loc.replace(/[省市辖区]/g, '');
+        }
+
+        return value;
+      }
     },
     mounted(){
       this.id = this.$route.params.id;
@@ -78,7 +102,7 @@
     },
     methods: {
       getUserInfo(id){
-        let data = ['nickname', 'avatar', 'signature', 'sex', 'birth', 'company', 'profession'];
+        let data = ['nickname', 'avatar', 'signature', 'sex', 'birth', 'location', 'company', 'profession'];
         this.$http.get(`/api/user/${id}/?${dataToQuery(data)}`).then(({data}) => {
           var {code, data} = data;
           if (code === '0') {

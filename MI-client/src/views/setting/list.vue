@@ -14,12 +14,16 @@
         <cell title="资料设置" link="/setting/person"></cell>
         <cell title="系统设置" link="/setting/system"></cell>
       </group>
+
+      <div style="margin-top: 30px;padding: 0 10px">
+        <x-button type="warn" @click.native="doSignOut">退 出 登 录</x-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  import {Group, Cell, CellBox} from 'vux'
+  import {Group, Cell, CellBox, XButton, cookie} from 'vux'
   import MHeader from '@/components/header'
   import {mapGetters} from 'vuex'
   import {avatarLocation} from '@/filters'
@@ -29,7 +33,8 @@
       Group,
       Cell,
       MHeader,
-      CellBox
+      CellBox,
+      XButton
     },
     computed: {
       ...mapGetters(['avatar'])
@@ -48,14 +53,24 @@
         }).then(({data}) => {
           var {code} = data;
           if (code === '1') {
-            this.$toast('data.message');
+            this.$toast(data.message);
             return;
           }
 
           this.$toast('上传成功');
           this.$store.state.user.avatar = data.data.avatar;
         });
-
+      },
+      doSignOut(){
+        const _this = this;
+        this.$vux.confirm.show({
+          content: '确定要退出吗？',
+          onConfirm(){
+            _this.$store.commit('SOCKET_CLOSE');
+            cookie.remove('mi_afdaefe95e9d7e12');
+            _this.$router.push({path: '/login'});
+          }
+        });
       }
     }
   }

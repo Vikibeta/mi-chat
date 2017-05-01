@@ -1,6 +1,6 @@
 <template>
   <div>
-    <m-header title="账号注册"></m-header>
+    <m-header title="账号注册" @on-back="$router.go(-1)"></m-header>
     <div class="view-wrap">
       <div class="register-form">
         <group>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import {XInput, Group, XButton} from 'vux'
+  import {XInput, Group, XButton, cookie} from 'vux'
   import MHeader from '../components/header'
 
   export default {
@@ -86,9 +86,12 @@
               this.$http.defaults.params.token = token;  // 存token
               this.$store.commit('SET_USER', data.user);  // 个人信息存入全局状态
               this.$store.dispatch('SOCKET_CON', token);
-              if (window.localStorage) {
-                window.localStorage.setItem('mi_token', token);
-              }
+
+              // 设置cookie
+              cookie.set('mi_afdaefe95e9d7e12', token, {
+                path: '/',
+                expires: 15
+              });
 
               setTimeout(()=>{
                 this.$router.push({path: '/home/messages'})

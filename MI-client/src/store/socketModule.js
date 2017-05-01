@@ -15,6 +15,10 @@ export default {
   mutations: {
     ['SET_SOCKET'](state, socket){
       state.socket = socket;
+    },
+    ['SOCKET_CLOSE'](state, socket) {
+      state.socket.close();
+      state.socket = null;
     }
   },
   actions: {
