@@ -25,7 +25,12 @@ export default {
     ['SOCKET_CON']({commit}, token){
 
       // socket连接
-      const socket = io(`http://localhost:3000?token=${token}`);
+      let url;
+      const NODE_ENV = process.env.NODE_ENV;  //判断环境
+      if(NODE_ENV === 'development') url = 'http://localhost:3000/';
+      if(NODE_ENV === 'production') url = '/';
+
+      const socket = io(`${url}?token=${token}`);
 
       commit('SET_SOCKET', socket);
 

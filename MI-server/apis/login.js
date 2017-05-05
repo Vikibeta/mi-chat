@@ -21,7 +21,7 @@ module.exports = function (router) {
         const doAuth = async function () {
             const user = await userModel.findOne({
                 _id, password: md5Password
-            }, "_id").catch(err => {
+            }, "-password -messages -_v -is_online").catch(err => {
                 error(err, res);
             });
 

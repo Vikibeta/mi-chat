@@ -16,7 +16,7 @@ module.exports = function (router) {
     router.get('/user', function (req, res) {
         const user = req.mi_user;
 
-        UserModel.findOne({_id: user}, "-messages -password -is_online -groups").then(user => {
+        UserModel.findOne({_id: user}, "-messages -password -is_online -_v").then(user => {
             return res.json({
                 code: '0',
                 data: user
@@ -30,7 +30,6 @@ module.exports = function (router) {
     router.put('/user', function (req, res) {
         const user = req.mi_user;
         const data = req.body;
-        console.log(data);
 
         UserModel.update({_id: user}, {
             $set: data

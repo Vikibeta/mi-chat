@@ -36,7 +36,8 @@ const store = new Vuex.Store({
     // 个人的信息
     user: {
       _id: '',
-      avatar: 'default.jpg'
+      avatar: 'default.jpg',
+      groups: ['']
     },
     // 联系人列表
     contacts: null,
@@ -44,8 +45,6 @@ const store = new Vuex.Store({
     native_messages: [],
     // 消息列表
     messages: [],
-    // 分组列表
-    groups: [],
     // 聊天页的消息显示列表
     msg_in_chat: {
       msgList: [],
@@ -78,6 +77,11 @@ const store = new Vuex.Store({
     },
     me_id: (state, getters) => getters.user._id,
     avatar: (state, getters) => getters.user.avatar,
+    groups:(state, getters) =>{
+      var g = getters.user.groups;
+      var defaultG = g[0];
+      return ({ g, defaultG });
+    },
     contacts: state => state.contacts,
     messages: (state, getters) => {
       if (state.messages.length === 0) {
@@ -140,9 +144,6 @@ const store = new Vuex.Store({
     },
     ['SET_CONTACTER_IS_ONLINE'](state, is_online) {
       state.contacter_is_online = is_online
-    },
-    ['SET_GROUPS'](state, groups) {
-      state.groups = groups;
     },
     // 更新未读消息列表的顺序和内容
     ['UPDATE_MESSAGES_INDEX'](state, msg){

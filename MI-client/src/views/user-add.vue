@@ -7,7 +7,7 @@
           <img :src="user.avatar | avatarLocation" class="avatar">
           <div class="user-info">
             <p class="nickname"><strong>{{user.nickname}}</strong></p>
-            <p>{{user.sex}}&nbsp;&nbsp;{{age}} 岁&nbsp;&nbsp;{{user.location}}</p>
+            <p>{{user.sex}}&nbsp;&nbsp;{{age}} 岁&nbsp;&nbsp;{{user.location | locationFilter}}</p>
           </div>
         </div>
       </div>
@@ -15,7 +15,7 @@
       <div class="group" style="margin-top: 20px;">
         <p class="text" style="padding-left: 15px;margin-bottom: 5px;">选择分组</p>
         <group>
-          <radio :options="groups" v-model="defaultGroup"></radio>
+          <radio :options="groups.g" v-model="groups.defaultG"></radio>
         </group>
       </div>
 
@@ -28,7 +28,7 @@
 
 <script>
   import MHeader from '../components/header'
-  import {Group, Radio, XButton} from 'vux'
+  import {Group, Radio, XButton, ChinaAddressV3Data, Value2nameFilter as value2name} from 'vux'
   import {mapGetters} from 'vuex'
   import dataToQuery from '../utils/dataToQuery'
   import {avatarLocation} from '../filters'
@@ -44,15 +44,21 @@
       return {
         contacter_id: '',
         user: {},
-        groups: [],
-        defaultGroup: ''
       }
     },
     filters: {
-      avatarLocation
+      avatarLocation,
+      locationFilter(value){
+        if (value && value !== '中国') {
+          const loc = value2name(value.split('-'), ChinaAddressV3Data);
+          return loc.replace(/[省市辖区]/g, '');
+        }
+
+        return value;
+      }
     },
     computed: {
-      ...mapGetters(['me_id']),
+      ...mapGetters(['me_id', 'groups']),
       age(){
         const cYear = new Date().getFullYear();
         const birth = this.user.birth;
@@ -60,33 +66,37 @@
         return cYear - birthYear + 1;
       }
     },
+    watch: {
+      groups(v){
+        this.groups = v;
+      }
+    },
     created(){
-      if (this.$store.state.contacts === null) {
-        this.$store.dispatch('GET_CONTACTS');
+      if(this.$store.state.contacts === null) {
+          this.$store.dispatch('GET_CONTACTS');
       }
     },
     mounted(){
-      this.getGroups();
       this.getUserInfo();
     },
     methods: {
-      getGroups(){  // 获取分组信息
-        const groups = this.$store.state.groups;
-        // 如果vuex中已经有groups信息了，就从vuex中拿
-        if (groups.length === 0) {
-          this.$http.get('/api/user/groups').then(({data}) => {
-            var {code, data} = data;
-            if (code === '0') {
-              this.groups = data;
-              this.defaultGroup = data[0];
-              this.$store.commit('SET_GROUPS', data);
-            }
-          })
-        } else {
-          this.groups = groups;
-          this.defaultGroup = groups[0];
-        }
-      },
+//      getGroups(){  // 获取分组信息
+//        const groups = this.$store.state.user.groups;
+//        // 如果vuex中已经有groups信息了，就从vuex中拿
+//        if (!groups || groups.length === 0) {
+//          this.$http.get('/api/user/groups').then(({data}) => {
+//            var {code, data} = data;
+//            if (code === '0') {
+//              this.groups = data;
+//              this.defaultGroup = data[0];
+//              this.$store.commit('SET_GROUPS', data);
+//            }
+//          })
+//        } else {
+//          this.groups = groups;
+//          this.defaultGroup = groups[0];
+//        }
+//      },
       getUserInfo(){  // 获取联系人信息
         this.contacter_id = this.$route.params.id;
         const data = ['avatar', 'location', 'sex', 'birth', 'nickname', 'is_online'];
@@ -105,7 +115,7 @@
 
         this.$http.post('/api/contacts', {
           contacter: this.contacter_id,
-          group_name: this.defaultGroup
+          group_name: this.groups.defaultG
         }).then(({data}) => {
           var {code, message} = data;
           if (code === '0') {
@@ -142,7 +152,7 @@
         const {_id, avatar, nickname, is_online} = this.user;
         const user = {_id, avatar, nickname, is_online};
         this.$store.commit('UPDATE_CONTACTS', {
-          group_name: this.defaultGroup,
+          group_name: this.groups.defaultG,
           contact_info: user
         })
       }

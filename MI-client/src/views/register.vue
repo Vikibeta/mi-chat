@@ -25,10 +25,10 @@
   export default {
     data(){
       return {
-        id: '666666',
-        nickname: 'lavyun',
-        password: 'gxzyx1314',
-        password1: 'gxzyx1314'
+        id: '',
+        nickname: '',
+        password: '',
+        password1: ''
       }
     },
     components: {
