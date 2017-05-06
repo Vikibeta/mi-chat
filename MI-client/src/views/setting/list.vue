@@ -67,7 +67,10 @@
           content: '确定要退出吗？',
           onConfirm(){
             _this.$store.commit('SOCKET_CLOSE');
-            cookie.remove('mi_afdaefe95e9d7e12');
+            cookie.remove('mi_afdaefe95e9d7e12', {
+              domain: location.hostname,
+              path: '/'
+            });
             _this.$router.push({path: '/login'});
           }
         });

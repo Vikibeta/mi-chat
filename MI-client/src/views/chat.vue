@@ -34,7 +34,7 @@
     <div class="input_area">
       <div class="input_area-input-wrap">
         <div class="input_area-input-wrap2">
-          <div class="scrollbar input_area-input" contenteditable="true" ref="input"></div>
+          <div class="scrollbar input_area-input" contenteditable="true" ref="input" @click="handleKeyboardPop"></div>
         </div>
       </div>
       <div class="input_area-btn-wrap">
@@ -171,19 +171,23 @@
           const clientHeight = document.body.clientHeight;
           const currentScrollTop = scrollPanel.scrollTop;
           const scrollHeight = scrollPanel.scrollHeight;
-          const targetScrollTop = scrollHeight - (clientHeight - 84);
-          const scrollTopDuration = (targetScrollTop - currentScrollTop) / 10;
+          const scrollTopDuration = (scrollHeight - (clientHeight - 84) - currentScrollTop) / 10;
 
+
+          let raf_id = null;
+          let targetScrollTop = scrollHeight;
 
           function toBottom() {
+            targetScrollTop = scrollPanel.scrollTop;
             scrollPanel.scrollTop += scrollTopDuration;
-            if (scrollPanel.scrollTop < targetScrollTop) {
-              requestAnimationFrame(toBottom)
+            if (scrollPanel.scrollTop !== targetScrollTop) {
+              raf_id = requestAnimationFrame(toBottom)
+            } else {
+                cancelAnimationFrame(raf_id);
             }
           }
 
-          requestAnimationFrame(toBottom);
-
+          toBottom();
         })
       },
       sendMessage(){
@@ -191,7 +195,6 @@
         if (this.has_input === false) this.has_input = true;
 
         const message = this.$refs.input.innerHTML;
-        console.log(message);
         this.message = message;
         this.$refs.input.innerHTML = '';
         this.socket.emit('message', message);
@@ -204,6 +207,11 @@
           this.is_pass_router_validate = false;
           this.$router.push({path: '/home/messages'});
         }
+      },
+      handleKeyboardPop(){
+        setTimeout(()=>{   // 输入框弹起后，聊天页滚动到最底部，500ms时间间隔。不然可能会在输入框弹起之前滚到了底部
+            this.scrollBottom();
+        },500);
       }
     },
     beforeRouteLeave(to, from, next) {

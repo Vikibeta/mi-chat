@@ -103,6 +103,7 @@
 
             // 设置cookie
             cookie.set('mi_afdaefe95e9d7e12', token, {
+              domain: location.hostname,
               path: '/',
               expires: 15
             });
