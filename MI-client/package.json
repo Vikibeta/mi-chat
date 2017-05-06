@@ -2,8 +2,7 @@
   "name": "mi-chat",
   "version": "1.0.0",
   "description": "a chat application named MI",
-  "author": "lavyun <lavyun@163.com>",
-  "private": true,
+  "author": "lavyun",
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js"
