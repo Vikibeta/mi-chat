@@ -27,11 +27,11 @@
 </template>
 
 <script>
-  import MHeader from '../components/header'
+  import MHeader from '@/components/header'
   import {Group, Radio, XButton, ChinaAddressV3Data, Value2nameFilter as value2name} from 'vux'
   import {mapGetters} from 'vuex'
-  import dataToQuery from '../utils/dataToQuery'
-  import {avatarLocation} from '../filters'
+  import dataToQuery from '@/utils/dataToQuery'
+  import {avatarLocation} from '@/filters'
 
   export default {
     components: {

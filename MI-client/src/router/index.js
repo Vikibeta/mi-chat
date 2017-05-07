@@ -11,20 +11,20 @@ Vue.use(VueRouter);
 import Login from '../views/login'   // 登录
 import Forget from '../views/forget'   // 忘记密码
 import Register from '../views/register'   // 注册
-import Home from '../views/home'
-import HomeMessages from '../views/home-messages'   // 未读信息
-import HomeContacts from '../views/home-contacts'   // 联系人列表
+import Home from '../views/home/index'
+import HomeMessages from '../views/home/messages'   // 未读信息
+import HomeContacts from '../views/home/contacts'   // 联系人列表
 import Chat from '../views/chat'   // 私聊
-import Add from '../views/add-friend'   // 添加联系人
-import AddExactly from '../views/add-friend-exactly'   // 精确查找
-import AddSelectively from '../views/add-friend-selectively'   // 条件查找
-import User from '../views/user'
-import UserAdd from '../views/user-add'
-import Me from '../views/me'
-import Setting from '../views/setting/index'
-import SettingList from '../views/setting/list'
-import SettingPerson from '../views/setting/person'
-import SettingSystem from '../views/setting/system'
+import Add from '../views/add/index'   // 添加联系人
+import AddExactly from '../views/add/exactly'   // 精确查找
+import AddSelectively from '../views/add/selectively'   // 条件查找
+import User from '../views/user/index'  // 联系人添加
+import UserAdd from '../views/user/add'  // 联系人添加详情，分组选择
+import Me from '../views/me'   // 个人信息
+import Setting from '../views/setting/index'  // 设置
+import SettingList from '../views/setting/list'   // 设置页选项列表
+import SettingPerson from '../views/setting/person'   // 个人资料设置
+import SettingSystem from '../views/setting/system'   // 系统资料设置
 
 
 const routerHome = {

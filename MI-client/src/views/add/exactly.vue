@@ -44,8 +44,8 @@
 
 <script>
   import {Group, XInput, CellBox} from 'vux'
-  import dataToQuery from '../utils/dataToQuery'
-  import {avatarLocation} from '../filters'
+  import dataToQuery from '@/utils/dataToQuery'
+  import {avatarLocation} from '@/filters'
 
   export default {
     components: {

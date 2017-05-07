@@ -9,9 +9,6 @@
         <div class="user-info-nickname text-center">{{user.nickname}}</div>
         <div class="user-info-signature text-ellipsis text-center" v-if="user.signature && user.signature.length !== 0">
           {{user.signature}}
-
-
-
         </div>
         <div class="user-info-sex_loc text-center">
           <span class="iconfont tip"
@@ -55,10 +52,10 @@
 </template>
 
 <script>
-  import MHeader from '../components/header'
+  import MHeader from '@/components/header'
   import {Group, Cell, XButton, ChinaAddressV3Data, Value2nameFilter as value2name} from 'vux'
-  import dataToQuery from '../utils/dataToQuery'
-  import {avatarLocation} from '../filters'
+  import dataToQuery from '@/utils/dataToQuery'
+  import {avatarLocation} from '@/filters'
 
   export default {
     components: {

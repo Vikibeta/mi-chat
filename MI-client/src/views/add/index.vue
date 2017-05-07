@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import MHeader from '../components/header'
+  import MHeader from '@/components/header'
   import {Tab, TabItem} from 'vux'
   export default {
     components: {

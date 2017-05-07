@@ -24,7 +24,7 @@
 
 <script>
   import {mapGetters} from 'vuex'
-  import {avatarLocation} from '../filters'
+  import {avatarLocation} from '@/filters'
   export default {
     data(){
       return {

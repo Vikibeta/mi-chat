@@ -36,7 +36,7 @@
 <script>
   import {Group, CellBox} from 'vux'
   import {mapGetters} from 'vuex'
-  import {avatarLocation} from '../filters'
+  import {avatarLocation} from '@/filters'
 
   export default {
     components: {
