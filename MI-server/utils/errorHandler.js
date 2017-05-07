@@ -4,12 +4,11 @@
  * lavyun@163.com
  */
 module.exports = function (err, res) {
+    console.log(err);
     if (res) {
         return res.json({
             code: '1',
             message: '服务器发生错误，请重试'
         })
     }
-
-    console.log(err);
 };

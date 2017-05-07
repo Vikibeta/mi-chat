@@ -5,7 +5,7 @@
       <group>
         <x-input title="昵称" v-model="user.nickname" placeholder="请输入昵称"></x-input>
         <popup-picker title="性别" :data="sexList" v-model="sex"></popup-picker>
-        <datetime title="生日" v-model="user.birth" confirm-text="确定" cancel-text="取消"></datetime>
+        <datetime title="生日" :min-year=1900 v-model="user.birth" confirm-text="确定" cancel-text="取消"></datetime>
       </group>
 
       <group style="margin-top: 20px">
@@ -38,7 +38,6 @@
   export default {
     components: {
       Group,
-      Cell,
       XInput,
       MHeader,
       PopupPicker,

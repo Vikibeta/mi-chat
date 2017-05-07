@@ -36,7 +36,7 @@ module.exports = function (router) {
         };
 
         doAuth().then(function (user) {
-            const token = jwt.sign(user, config.jwtSecret, {
+            const token = jwt.sign(user._id, config.jwtSecret, {
                 expiresIn: 60 * 60 * 24 * 15
             });
 

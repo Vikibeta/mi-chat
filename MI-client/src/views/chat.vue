@@ -96,7 +96,7 @@
     mounted(){
       const _this = this;
 
-      // 验证是不是跟自己聊天，是不是自己的好友
+      // 验证是不是跟自己聊天
       if (this.me_id) this.validate(this.me_id);
 
       // 一进入聊天页后端就将to_id的未读消息数量置零
@@ -115,12 +115,8 @@
       // 进入聊天页时默认滚动条在底部
       const scrollPanel = document.getElementById('scroll');
       scrollPanel.scrollTop = scrollPanel.scrollHeight;
-//      console.log(scrollPanel.scrollTop);
-//      console.log(scrollPanel.scrollHeight);
-//      setTimeout(function () {
-//        scrollPanel.scrollTop = scrollPanel.scrollHeight;
-//      },500);
 
+      // 加入房间
       socket.emit('joinPrivateChat', _this.to_id);
 
       // token验证没通过时的前端处理
