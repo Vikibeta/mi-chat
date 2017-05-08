@@ -13,7 +13,7 @@
         <div class="user-info-sex_loc text-center">
           <span class="iconfont tip"
                 :style="{'background-color': (user.sex === '男' ? 'lightskyblue' : 'rgb(246,152,179)')}">
-            {{user.sex}}&nbsp;&nbsp;{{age}} 岁&nbsp;&nbsp;{{user.location | locationFilter}}
+            {{user.sex}}&nbsp;&nbsp;{{user.age}} 岁&nbsp;&nbsp;{{user.location | locationFilter}}
           </span>
         </div>
         <group style="margin-top: 15px;">
@@ -99,7 +99,7 @@
     },
     methods: {
       getUserInfo(id){
-        let data = ['nickname', 'avatar', 'signature', 'sex', 'birth', 'location', 'company', 'profession'];
+        let data = ['nickname', 'avatar', 'signature', 'sex', 'age', 'location', 'company', 'profession'];
         this.$http.get(`/api/user/${id}/?${dataToQuery(data)}`).then(({data}) => {
           var {code, data} = data;
           if (code === '0') {

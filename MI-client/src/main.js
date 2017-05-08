@@ -9,7 +9,7 @@ import io from 'socket.io-client'
 import router from './router'
 import store from './store'
 import ramPolyfill from './utils/requestAnimationFramePolyfill';
-import { ToastPlugin, cookie, ConfirmPlugin, AlertPlugin } from 'vux'
+import { ToastPlugin, cookie, ConfirmPlugin, AlertPlugin, LoadingPlugin } from 'vux'
 
 import './assets/css/neat-min.css'
 import './assets/css/style.less'
@@ -21,6 +21,7 @@ Vue.config.productionTip = false;
 Vue.use(ToastPlugin);
 Vue.use(ConfirmPlugin);
 Vue.use(AlertPlugin);
+Vue.use(LoadingPlugin);
 
 Axios.defaults.params = {
   token: cookie.get('mi_afdaefe95e9d7e12') || ''

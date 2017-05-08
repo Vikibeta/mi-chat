@@ -18,6 +18,7 @@ import Chat from '../views/chat'   // 私聊
 import Add from '../views/add/index'   // 添加联系人
 import AddExactly from '../views/add/exactly'   // 精确查找
 import AddSelectively from '../views/add/selectively'   // 条件查找
+import SelectivelyList from '../views/add/selectively-list'  // 条件查找的列表
 import User from '../views/user/index'  // 联系人添加
 import UserAdd from '../views/user/add'  // 联系人添加详情，分组选择
 import Me from '../views/me'   // 个人信息
@@ -79,7 +80,7 @@ export default new VueRouter({
     }, {
       path: '/chat/:to', component: Chat
     }, {
-      path: '/add', component: Add
+      path: '/selectivelyList', component: SelectivelyList
     }, {
       path: '/user/:id', component: User
     }, {

@@ -16,16 +16,14 @@ module.exports = function (router) {
     router.get('/user', function (req, res) {
         const user = req.mi_user;
 
-        UserModel.findOne({_id: user}, "-messages -password -is_online -_v")
-            .then(user => {
-                return res.json({
-                    code: '0',
-                    data: user
-                });
-            })
-            .catch(err => {
-                error(err, res);
-            })
+        UserModel.findOne({_id: user}, "-messages -password -is_online -_v").then(user => {
+            return res.json({
+                code: '0',
+                data: user
+            });
+        }).catch(err => {
+            error(err, res);
+        })
     });
 
     // 根据年龄，性别，所在地条件查询
@@ -34,27 +32,24 @@ module.exports = function (router) {
 
         sex = sex === '0' ? '男' : '女';
         location = location || '中国';
+        sAge = +sAge;  // 字符串转成数字
+        bAge = +bAge;
 
-        let currentYear = new Date().getFullYear();
-        let sYear = currentYear - bAge;
-        let bYear = currentYear - sAge;
-
-        UserModel
-            .find({sex, location}, "nickname is_online signature avatar birth")
-            .then(users => {
-                const usersFilter = users.filter(function (user) {
-                    let birthYear = +user.birth.substr(0, 4);
-                    return birthYear >= sYear && birthYear <= bYear;
-                });
-
-                return res.json({
-                    code: '0',
-                    data: usersFilter
-                })
+        UserModel.find({
+            sex,
+            location,
+            age: {
+                $gte: sAge,
+                $lte: bAge
+            }
+        }, "nickname is_online signature avatar birth").then(users => {
+            return res.json({
+                code: '0',
+                data: users
             })
-            .catch(err => {
-                error(err, res)
-            })
+        }).catch(err => {
+            error(err, res)
+        })
     });
 
     // 修改个人信息
@@ -62,32 +57,28 @@ module.exports = function (router) {
         const user = req.mi_user;
         const data = req.body;
 
-        UserModel.update({_id: user}, {$set: data})
-            .then(user => {
-                return res.json({
-                    code: '0',
-                    data: user
-                })
+        UserModel.update({_id: user}, {$set: data}).then(user => {
+            return res.json({
+                code: '0',
+                data: user
             })
-            .catch(err => {
-                error(err, res);
-            })
+        }).catch(err => {
+            error(err, res);
+        })
     });
 
     // 获取分组信息
     router.get('/user/groups', function (req, res) {
         const user = req.mi_user;
 
-        UserModel.findOne({_id: user}, "groups -_id")
-            .then(user => {
-                return res.json({
-                    code: '0',
-                    data: user.groups
-                })
+        UserModel.findOne({_id: user}, "groups -_id").then(user => {
+            return res.json({
+                code: '0',
+                data: user.groups
             })
-            .catch(err => {
-                error(err, res);
-            })
+        }).catch(err => {
+            error(err, res);
+        })
     });
 
     // 更新头像

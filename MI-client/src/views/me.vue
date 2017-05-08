@@ -12,7 +12,7 @@
         <div class="user-info-sex_loc text-center">
           <span class="iconfont tip"
                 :style="{'background-color': (user.sex === '男' ? 'lightskyblue' : 'rgb(246,152,179)')}">
-            {{user.sex}}&nbsp;&nbsp;{{age}} 岁&nbsp;&nbsp;{{user.location | locationFilter}}
+            {{user.sex}}&nbsp;&nbsp;{{user.age}} 岁&nbsp;&nbsp;{{user.location | locationFilter}}
           </span>
         </div>
         <group style="margin-top: 10px;">
@@ -71,13 +71,7 @@
       }
     },
     computed: {
-      ...mapGetters(['user']),
-      age(){
-        const cYear = new Date().getFullYear();
-        const birth = this.user.birth;
-        const birthYear = birth && parseInt(birth.substr(0, 4));
-        return cYear - birthYear + 1;
-      }
+      ...mapGetters(['user'])
     }
 
   }

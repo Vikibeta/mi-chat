@@ -34,6 +34,7 @@
 
   import MHeader from '@/components/header'
   import {mapGetters} from 'vuex'
+  import birthToAge from '@/utils/birthToAge';
 
   export default {
     components: {
@@ -75,6 +76,8 @@
     },
     methods: {
       doUpdate(){
+        this.user.age = birthToAge(this.user.birth);
+
         const afterUpdate = {
           ...this.user,
           sex: this.sex[0],

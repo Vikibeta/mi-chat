@@ -75,9 +75,18 @@
         let sex = this.sexIndex;
         let sAge = this.ageDefault[0];
         let bAge = this.ageDefault[1];
-        let cityCode = this.cityDefault.join('-');
-        this.$http.get(`/api/users?sex=${sex}&sAge=${sAge}&bAge=${bAge}&cityCode=${cityCode}`).then(({data})=>{
-          console.log(data);
+        let location = this.cityDefault.join('-');
+        this.$vux.loading.show();
+        this.$http.get(`/api/users?sex=${sex}&sAge=${sAge}&bAge=${bAge}&location=${location}`).then(({data}) => {
+          var {code, data} = data;
+          if (code === '0') {
+            this.$store.commit('SET_SELECTIVELY_LIST', {
+              params: {sex, sAge, bAge, location},
+              list: data
+            })
+          }
+          this.$vux.loading.hide();
+          this.$router.push({path: '/selectivelyList'});
         })
       }
     }

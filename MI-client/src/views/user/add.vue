@@ -7,7 +7,7 @@
           <img :src="user.avatar | avatarLocation" class="avatar">
           <div class="user-info">
             <p class="nickname"><strong>{{user.nickname}}</strong></p>
-            <p>{{user.sex}}&nbsp;&nbsp;{{age}} 岁&nbsp;&nbsp;{{user.location | locationFilter}}</p>
+            <p>{{user.sex}}&nbsp;&nbsp;{{user.age}} 岁&nbsp;&nbsp;{{user.location | locationFilter}}</p>
           </div>
         </div>
       </div>
@@ -58,13 +58,7 @@
       }
     },
     computed: {
-      ...mapGetters(['me_id', 'groups']),
-      age(){
-        const cYear = new Date().getFullYear();
-        const birth = this.user.birth;
-        const birthYear = birth && parseInt(birth.substr(0, 4));
-        return cYear - birthYear + 1;
-      }
+      ...mapGetters(['me_id', 'groups'])
     },
     watch: {
       groups(v){
@@ -80,26 +74,9 @@
       this.getUserInfo();
     },
     methods: {
-//      getGroups(){  // 获取分组信息
-//        const groups = this.$store.state.user.groups;
-//        // 如果vuex中已经有groups信息了，就从vuex中拿
-//        if (!groups || groups.length === 0) {
-//          this.$http.get('/api/user/groups').then(({data}) => {
-//            var {code, data} = data;
-//            if (code === '0') {
-//              this.groups = data;
-//              this.defaultGroup = data[0];
-//              this.$store.commit('SET_GROUPS', data);
-//            }
-//          })
-//        } else {
-//          this.groups = groups;
-//          this.defaultGroup = groups[0];
-//        }
-//      },
       getUserInfo(){  // 获取联系人信息
         this.contacter_id = this.$route.params.id;
-        const data = ['avatar', 'location', 'sex', 'birth', 'nickname', 'is_online'];
+        const data = ['avatar', 'location', 'sex', 'age', 'nickname', 'is_online'];
         this.$http.get(`/api/user/${this.contacter_id}/?${dataToQuery(data)}`).then(({data}) => {
           var {code, data} = data;
           if (code === '0') {

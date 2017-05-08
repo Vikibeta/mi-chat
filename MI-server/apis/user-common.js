@@ -10,7 +10,7 @@ module.exports = function (router) {
         queryKeys.pop(); // 移除token
 
         // 可以被查询的属性
-        let canQueryKeys = ['nickname', 'is_online', 'avatar', 'signature', 'sex', 'birth', 'location', 'company', 'profession'];
+        let canQueryKeys = ['nickname', 'is_online', 'avatar', 'signature', 'age', 'sex', 'birth', 'location', 'company', 'profession'];
 
         // url是否合法
         let inCanQuery = queryKeys.every(function (value) {

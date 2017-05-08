@@ -60,6 +60,10 @@ const store = new Vuex.Store({
     has_get: {
       contacts: false,
       messages: false
+    },
+    selectively_list: {
+      params: null,
+      list: []
     }
   },
   getters: {
@@ -115,7 +119,8 @@ const store = new Vuex.Store({
     },
     has_get: state => state.has_get,
     msg_in_chat: state => state.msg_in_chat,
-    contacter_is_online: state => state.contacter_is_online
+    contacter_is_online: state => state.contacter_is_online,
+    selectively_list: state => state.selectively_list
   },
   mutations: {
     ['SET_USER'](state, user) {
@@ -174,6 +179,10 @@ const store = new Vuex.Store({
           state.contacts[i].contacts.push(contact_info);
         }
       }
+    },
+    // 设置条件查询时的联系人列表
+    ['SET_SELECTIVELY_LIST'](state, selectively_list){
+      state.selectively_list = selectively_list;
     }
   },
   actions: {

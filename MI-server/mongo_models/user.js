@@ -14,6 +14,7 @@ module.exports = {
         password: {type: String, required: true},  // 密码，hash加密
         sex: {type: String, default: '男'},  // 性别，默认为男
         birth: {type: String, default: getToday()},  // 生日
+        age: {type: Number, default: 1},  // 年龄
         location: {type: String, default: '中国'},  // 所在地
         create_at: {type: Date, default: Date.now},  // 注册日期
         is_online: {type: Number, default: 0},  // 是否在线  0表示不在线
